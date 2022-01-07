@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit UserForCv{% endblock %}
+
+{% block body %}
+    <h1>Edit UserForCv</h1>
+
+    {{ include('admin_user_for_cv/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('cv_index') }}">back to list</a>
+
+    {{ include('admin_user_for_cv/_delete_form.html.twig') }}
+{% endblock %}

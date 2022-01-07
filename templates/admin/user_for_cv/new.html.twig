@@ -1,0 +1,346 @@
+{% extends 'admin/base.html.twig' %} {% import "macros/link.html.twig" as link %} {% import "macros/button.html.twig" as btn %} {% block title %} New UserForCv {% endblock %} {% block body %}
+<div class="card">
+    <div class="card-header card-outline card-primary">
+        Création d'un nouveau CV
+    </div>
+    {{ form_start(form) }}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.nom) }} {{ form_row(form.email) }} {{ form_row(form.poste) }}</div>
+            <div class="col-md-4">{{ form_row(form.prenom) }} {{ form_row(form.adresse) }} {{ form_row(form.tel) }}</div>
+            <div class="col-md-4">{{ form_row(form.avatar) }}</div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="">Profil Personnel</label>
+                <textarea name="" id="" class="form-control" cols="5" rows="3"></textarea>
+            </div>
+
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h3>Compétences</h3>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">désignation</th>
+                            <th scope="col">pourcentage</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="competence">
+                        {# coming from somepplae #}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button id="comptence_add" class="btn btn-success">+</button>
+                    </div>
+                    <div class="col-xm-4"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>Langues</h3>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">désignation</th>
+                            <th scope="col">pourcentage</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="langue">
+                        {# coming somplace #}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"><button id="langue_add" class="btn btn-success">+</button></div>
+                    <div class="col-xm-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h3>Centre D'intéret</h3>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">désignation</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="centre_interet">
+
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button id="centre_interet_add" class="btn btn-success">+</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3>Logiciels (etes vous capable d'utiliser un logiciel ?)</h3>
+                {{form_start(formLogiciel)}} {{form_row(formLogiciel.reponse)}} {{form_end(formLogiciel)}}
+                <div id="affiche_logiciel">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">désignation</th>
+                                <th scope="col">pourcentage</th>
+                                <th scope="col">action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logiciel">
+                            {# comming some place #}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <button id="logiciel_add" class="btn btn-success">+</a>
+                        </div>
+                        <div class="col-xm-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <h3>Formations (Avez-vous effectuée une formation ?)</h3>
+                {{form_start(formFormation)}} {{form_row(formFormation.reponse)}}{{form_end(formFormation)}}
+                <div id="affiche_formation">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Diplome</th>
+                                <th scope="col">Année</th>
+                                <th scope="col">Ville</th>
+                                <th scope="col">Pays</th>
+                                <th scope="col">Ecole</th>
+                                <th scope="col">action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formation">
+                            {# coming some place #}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"><button id="formation_add" class="btn btn-success">+</button>
+                        </div>
+                        <div class="col-xm-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3>Expérience Professionnelle</h3>
+                {# j'aurai des tableaux dans des tableaux #}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Entreprise</th>
+                            <th scope="col">Poste Occupé</th>
+                            <th scope="col">Année</th>
+                            <th scope="col">Tache Effectuée(s)</th>
+                            <th scope="col">action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="experience_pro">
+                        {# coming some place #}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button href="#" id="experience_pro_add" class="btn btn-success">+</button>
+                    </div>
+                    <div class="col-xm-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4"></div>
+            <div class="col-lg-4">
+                <div class="btn-group">
+                    {{ link.back(path('cv_index'),'retour') }} {{ btn.add() }}
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %} {% block javascripts %}
+<script>
+    $(document).ready(function() {
+        /*pour logiciel*/
+        $("#affiche_logiciel").hide(500);
+        $("#rep_logiciel_reponse_0").click(function() {
+            $("#affiche_logiciel").show(500);
+        })
+        $("#rep_logiciel_reponse_1").click(function() {
+                $("#affiche_logiciel").hide(500);
+            })
+            /*pour formation*/
+        $("#affiche_formation").hide(500);
+        $("#rep_formation_reponse_0").click(function() {
+            $("#affiche_formation").show(500);
+        })
+        $("#rep_formation_reponse_1").click(function() {
+                $("#affiche_formation").hide(500);
+            })
+            /*functions */
+        addCompetence()
+
+        function addCompetence() {
+            $.ajax({
+                url: "{{path('cv_new')}}",
+                method: "POST",
+                dataType: 'JSON',
+                data: {
+                    competence: 1
+                },
+                success: function(data) {
+                    $("#competence").append(data);
+                }
+            })
+
+        }
+        addLangue()
+
+        function addLangue() {
+            $.ajax({
+                url: "{{path('cv_new')}}",
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    langue: 1
+                },
+                success: function(data) {
+                    $("#langue").append(data);
+                }
+            })
+        }
+        addCentreInteret()
+
+        function addCentreInteret() {
+            $.ajax({
+                url: "{{path('cv_new')}}",
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    centreInteret: 1
+                },
+                success: function(data) {
+                    $("#centre_interet").append(data);
+                }
+            })
+        }
+        addLogiciel();
+
+        function addLogiciel() {
+            $.ajax({
+
+                url: '{{path("cv_new")}}',
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    logiciel: 1
+                },
+                success: function(data) {
+                    $("#logiciel").append(data);
+                }
+            })
+        }
+        addFormation();
+
+        function addFormation() {
+            $.ajax({
+                url: '{{path("cv_new")}}',
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    formation: 1
+                },
+                success: function(data) {
+                    $("#formation").append(data);
+                }
+            })
+        }
+        addExperiencepro();
+
+        function addExperiencepro() {
+            $.ajax({
+                url: '{{path("cv_new")}}',
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    experience: 1
+                },
+                success: function(data) {
+                    $("#experience_pro").append(data);
+                }
+            })
+        }
+        /***************************************************/
+
+        /**************add and remove competence*************/
+        $("#comptence_add").on("click", function() {
+            addCompetence()
+        })
+        $(document).on("click", ".comptence_remove", function() {
+                $(this).closest('tr').remove();
+            })
+            /***************add and remove  langue************************/
+        $("#langue_add").on("click", function() {
+            addLangue()
+        })
+        $(document).on("click", ".langue_remove", function() {
+                $(this).closest('tr').remove();
+            })
+            /**************add and remove centre interet*****************/
+        $("#centre_interet_add").click(function() {
+            addCentreInteret();
+        })
+        $(document).on('click', '.centre_interet_remove', function() {
+                $(this).closest('tr').remove();
+            })
+            /******************Add and remove logiciel****************************/
+        $("#logiciel_add").click(function() {
+            addLogiciel();
+        })
+        $(document).on('click', '.logiciel_remove', function() {
+                $(this).closest('tr').remove();
+            })
+            /*******addand remove formation ************/
+        $("#formation_add").on("click", function() {
+            addFormation()
+        })
+        $(document).on("click", ".formation_remove", function() {
+                $(this).closest('tr').remove();
+            })
+            /*****Add and remove experience professionnelle*********/
+        $("#experience_pro_add").on("click", function() {
+            addExperiencepro()
+        })
+        $(document).on("click", ".experience_pro_remove", function() {
+            $(this).closest('tr').remove();
+        })
+
+    })
+</script>
+{% endblock %}

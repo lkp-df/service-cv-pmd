@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserForCv index{% endblock %}
+
+{% block body %}
+    <h1>UserForCv</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Avatar</th>
+                <th>Poste_recherche_occupe</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_for_cv in user_for_cvs %}
+            <tr>
+                <td>{{ user_for_cv.id }}</td>
+                <td>{{ user_for_cv.nom }}</td>
+                <td>{{ user_for_cv.prenom }}</td>
+                <td>{{ user_for_cv.avatar }}</td>
+                <td>{{ user_for_cv.posteRechercheOccupe }}</td>
+                <td>
+                    <a href="{{ path('cv_show', {'id': user_for_cv.id}) }}">show</a>
+                    <a href="{{ path('cv_edit', {'id': user_for_cv.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cv_new') }}">Create new</a>
+{% endblock %}

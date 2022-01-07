@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserForCv{% endblock %}
+
+{% block body %}
+    <h1>UserForCv</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user_for_cv.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ user_for_cv.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ user_for_cv.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Avatar</th>
+                <td>{{ user_for_cv.avatar }}</td>
+            </tr>
+            <tr>
+                <th>Poste_recherche_occupe</th>
+                <td>{{ user_for_cv.posteRechercheOccupe }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cv_index') }}">back to list</a>
+
+    <a href="{{ path('cv_edit', {'id': user_for_cv.id}) }}">edit</a>
+
+    {{ include('admin_user_for_cv/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,41 +1,107 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}UserForCv index{% endblock %}
-
+{% extends 'admin/base.html.twig' %}
+{% import "macros/link.html.twig" as link %}
+{% import "macros/dataTable.html.twig" as dataTable %}
+{% import "macros/alertes.html.twig" as alert %}
+{% block title %}
+    User CV 
+    
+{% endblock %}
+{% block head %}
+    {{ dataTable.head() }}
+{% endblock %}
+{% block foot %}
+    {{ dataTable.js() }}
+{% endblock %}
+{% block javascripts %}
+    {{ dataTable.script('#table-1') }}
+{% endblock %}
 {% block body %}
-    <h1>UserForCv</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Avatar</th>
-                <th>Poste_recherche_occupe</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user_for_cv in user_for_cvs %}
-            <tr>
-                <td>{{ user_for_cv.id }}</td>
-                <td>{{ user_for_cv.nom }}</td>
-                <td>{{ user_for_cv.prenom }}</td>
-                <td>{{ user_for_cv.avatar }}</td>
-                <td>{{ user_for_cv.posteRechercheOccupe }}</td>
-                <td>
-                    <a href="{{ path('cv_show', {'id': user_for_cv.id}) }}">show</a>
-                    <a href="{{ path('cv_edit', {'id': user_for_cv.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('cv_new') }}">Create new</a>
+    {% for item in app.flashes('success') %}
+        {{ alert.alert(item,'success') }}
+    {% endfor %}
+    <div class="card card-outline card-blue">
+        <div class="card-header">
+            <h1>
+                User Curcilum Vitae         
+            </h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <h3>
+                        {{ link.add(path('cv_new'),'Create new') }}
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="table-1" class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Id
+                                                    
+                                </th>
+                                <th>
+                                    Nom
+                                                    
+                                </th>
+                                <th>
+                                    Prenom
+                                                    
+                                </th>
+                                <th>
+                                    Avatar
+                                                    
+                                </th>
+                                <th>
+                                    Poste_recherche_occupe
+                                                    
+                                </th>
+                                <th>
+                                    actions
+                                                    
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user_for_cv in user_for_cvs %}
+                                <tr>
+                                    <td>
+                                        {{ user_for_cv.id }}
+                                    </td>
+                                    <td>
+                                        {{ user_for_cv.nom }}
+                                    </td>
+                                    <td>
+                                        {{ user_for_cv.prenom }}
+                                    </td>
+                                    <td>
+                                        {{ user_for_cv.avatar }}
+                                    </td>
+                                    <td>
+                                        {{ user_for_cv.posteRechercheOccupe }}
+                                    </td>
+                                    <td>
+                                        {{ link.show(path('cv_show', {'id': user_for_cv.id})) }}
+                                        {{ link.edit(path('cv_edit', {'id': user_for_cv.id}),'Edit') }}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">
+                                        no records found
+                                                            
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            {{ link.back(path('admin'),'back to dashoard') }}
+        </div>
+    </div>
 {% endblock %}

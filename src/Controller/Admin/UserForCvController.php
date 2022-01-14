@@ -2,30 +2,43 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\CentreInteret;
-use App\Entity\Competence;
-use App\Entity\Contact;
 use App\Entity\Cv;
-use App\Entity\ExperienceProfessionnelle;
-use App\Entity\Formation;
 use App\Entity\Langue;
-use App\Entity\Logiciel;
-use App\Entity\MonProtoCv;
 use App\Entity\Profil;
+use App\Entity\Contact;
 use App\Entity\Reponse;
-use App\Entity\TacheEffectuer;
+use App\Entity\Logiciel;
+use App\Entity\Formation;
 use App\Entity\UserForCv;
 use App\Form\ProtoCvType;
-use App\Form\RepFormationType;
-use App\Form\RepLogicielType;
+use App\Entity\Competence;
+use App\Entity\MonProtoCv;
+use App\Form\UserForCvType;
 use App\Form\UserForCv1Type;
-use App\Repository\ExperienceProfessionnelleRepository;
+use App\Entity\CentreInteret;
+use App\Form\RepLogicielType;
+use App\Entity\TacheEffectuer;
+use App\Form\RepFormationType;
 use App\Repository\UserForCvRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\ExperienceProfessionnelle;
+use App\Entity\MonContact;
+use App\Form\ContactType;
+use App\Form\LangueType;
+use App\Form\LogicielType;
+use App\Form\ProfilType;
+use App\Form\RepLangueType;
+use App\Repository\ContactRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\ExperienceProfessionnelleRepository;
+use App\Repository\LangueRepository;
+use App\Repository\LogicielRepository;
+use App\Repository\ProfilRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/admin/cv")
@@ -172,173 +185,172 @@ class UserForCvController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //dump($request);
-            if(!empty($request->request->get("proto_cv")["nom"])
-            && !empty($request->request->get("proto_cv")["prenom"])
-            && !empty($request->request->get("proto_cv")["avatar"])
-            && !empty($request->request->get("proto_cv")["poste"]))
-            {
-                
-            
-            #definissons un new userForCv
-            $userForCv = new UserForCv();
-            $userForCv->setNom($request->request->get("proto_cv")["nom"])
-                ->setPrenom($request->request->get("proto_cv")["prenom"])
-                ->setAvatar($request->request->get("proto_cv")["avatar"])
-                ->setPosteRechercheOccupe($request->request->get("proto_cv")["poste"]);
+            if (
+                !empty($request->request->get("proto_cv")["nom"])
+                && !empty($request->request->get("proto_cv")["prenom"])
+                && !empty($request->request->get("proto_cv")["avatar"])
+                && !empty($request->request->get("proto_cv")["poste"])
+            ) {
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($userForCv);
-            $entityManager->flush();
 
-            #insertion du profil de l'utilisateur
-            $profil = new Profil();
-            $profil->setDescription($request->request->get("proto_cv")["profil"])
-                ->setUserForCv($repo->find($userForCv->getId()));
-            $entityManager->persist($profil);
-            $entityManager->flush();
+                #definissons un new userForCv
+                $userForCv = new UserForCv();
+                $userForCv->setNom($request->request->get("proto_cv")["nom"])
+                    ->setPrenom($request->request->get("proto_cv")["prenom"])
+                    ->setAvatar($request->request->get("proto_cv")["avatar"])
+                    ->setPosteRechercheOccupe($request->request->get("proto_cv")["poste"]);
 
-            #insertion du contact de l'utilisateur
-            $contact = new Contact();
-            $contact->setEmail($request->request->get("proto_cv")["email"])
-                ->setTel($request->request->get("proto_cv")["tel"])
-                ->setAdresse($request->request->get("proto_cv")["adresse"]);
-            $contact->setUserForCv($repo->find($userForCv->getId()));
-            $entityManager->persist($contact);
-            $entityManager->flush();
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($userForCv);
+                $entityManager->flush();
 
-            #insertion des competences qui est un tableau des compétences
-            $t_competence_design = $request->request->get("competence_design");
+                #insertion du profil de l'utilisateur
+                $profil = new Profil();
+                $profil->setDescription($request->request->get("proto_cv")["profil"])
+                    ->setUserForCv($repo->find($userForCv->getId()));
+                $entityManager->persist($profil);
+                $entityManager->flush();
 
-            for ($i = 0; $i < count($t_competence_design); $i++) {
-                if (
-                    !empty($request->request->get("competence_design")[$i])
-                    && !empty($request->request->get("competence_pourcent")[$i])
-                ) {
-                    $competence = new Competence();
-                    $competence->setDesignation($request->request->get("competence_design")[$i])
-                        ->setNiveauPourcent($request->request->get("competence_pourcent")[$i])
-                        ->setUserForCv($repo->find($userForCv->getId()));
-                    $entityManager->persist($competence);
-                    $entityManager->flush();
-                }
-            }
+                #insertion du contact de l'utilisateur
+                $contact = new Contact();
+                $contact->setEmail($request->request->get("proto_cv")["email"])
+                    ->setTel($request->request->get("proto_cv")["tel"])
+                    ->setAdresse($request->request->get("proto_cv")["adresse"]);
+                $contact->setUserForCv($repo->find($userForCv->getId()));
+                $entityManager->persist($contact);
+                $entityManager->flush();
 
-            #insertion des langues qui est un tableau de langue
-            $t_langue_design = $request->request->get("langue_design");
-            for ($i = 0; $i < count($t_langue_design); $i++) {
-                if (
-                    !empty($request->request->get("langue_design")[$i])
-                    && !empty($request->request->get("langue_pourcent")[$i])
-                ) {
-                    $langue = new Langue();
-                    $langue->setDesignation($request->request->get("langue_design")[$i])
-                        ->setNiveauPourcent($request->request->get("langue_pourcent")[$i])
-                        ->setUserForCv($repo->find($userForCv->getId()));
-                    $entityManager->persist($langue);
-                    $entityManager->flush();
-                }
-            }
+                #insertion des competences qui est un tableau des compétences
+                $t_competence_design = $request->request->get("competence_design");
 
-            #insertion centre d'interet qui est un tableau de centre d'interet
-            $t_centre_interet_design = $request->request->get("centre_interet_design");
-            for ($i = 0; $i < count($t_centre_interet_design); $i++) {
-                if (
-                    !empty($request->request->get("centre_interet_design")[$i])
-                ) {
-                    $centre_interet = new CentreInteret();
-                    $centre_interet->setDesignation($request->request->get("centre_interet_design")[$i])
-                        ->setUserForCv($repo->find($userForCv->getId()));
-                    $entityManager->persist($centre_interet);
-                    $entityManager->flush();
-                }
-            }
-            #insertion logiciel qui est un tableau de logiciel
-            $t_logiciel_design = $request->request->get("logiciel_design");
-            for ($i = 0; $i < count($t_logiciel_design); $i++) {
-                if (
-                    !empty($request->request->get("logiciel_design")[$i]
-                        && !empty($request->request->get("logiciel_pourcent")[$i]))
-                ) {
-                    $logiciel = new Logiciel();
-                    $logiciel->setDesignation($request->request->get("logiciel_design")[$i])
-                        ->setNiveauPourcent($request->request->get("logiciel_pourcent")[$i])
-                        ->setUserForCv($repo->find($userForCv->getId()));
-                    $entityManager->persist($logiciel);
-                    $entityManager->flush();
-                }
-            }
-
-            #insertion de la formation qui est un tableau de formation
-            $t_formation  = $request->request->get("formation_diplome");
-            for ($i = 0; $i < count($t_formation); $i++) {
-                if (
-                    !empty($request->request->get("formation_diplome")[$i]
-                        && !empty($request->request->get("formation_annee")[$i])
-                        && !empty($request->request->get("formation_ville")[$i])
-                        && !empty($request->request->get("formation_pays")[$i])
-                        && !empty($request->request->get("formation_ecole")[$i]))
-                ) {
-                    $formation = new Formation();
-                    $formation->setDiplome($request->request->get("formation_diplome")[$i])
-                        ->setAnnee($request->request->get("formation_annee")[$i])
-                        ->setVille($request->request->get("formation_ville")[$i])
-                        ->setPays($request->request->get("formation_pays")[$i])
-                        ->setEcoleObtention($request->request->get("formation_ecole")[$i])
-                        ->setUserForCv($repo->find($userForCv->getId()));
-                    $entityManager->persist($formation);
-                    $entityManager->flush();
-                }
-            }
-
-            #insertion experience professionnelle qui est un tableau d'experience professionnelle
-            $t_experience = $request->request->get("experience_pro_entreprise");
-
-            for ($i = 0; $i < count($t_experience); $i++) {
-                if (
-                    !empty($request->request->get("experience_pro_entreprise")[$i])
-                    && !empty($request->request->get("experience_pro_poste")[$i])
-                    && !empty($request->request->get("experience_pro_annee")[$i])
-                    && !empty($request->request->get("experience_pro_tache")[$i])
-                ) {
-                    $experience_pro = new ExperienceProfessionnelle();
-                    $experience_pro->setUserForCv($repo->find($userForCv->getId()))
-                        ->setNomEntreprise($request->request->get("experience_pro_entreprise")[$i])
-                        ->setPosteOccupe($request->request->get("experience_pro_poste")[$i])
-                        ->setAnneeOccupation($request->request->get("experience_pro_annee")[$i]);
-                    #enlevons les retours au chariot
-                    $t_tache = preg_replace('/\s\s+/', ' ', $request->request->get("experience_pro_tache")[$i]);
-
-                    $entityManager->persist($experience_pro);
-                    $entityManager->flush();
-
-                    if ($experience_pro->getId() != 0) {
-                        $tache = new TacheEffectuer();
-                        $tache->setDescription($t_tache)
-                            ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
-                        $entityManager->persist($tache);
+                for ($i = 0; $i < count($t_competence_design); $i++) {
+                    if (
+                        !empty($request->request->get("competence_design")[$i])
+                        && !empty($request->request->get("competence_pourcent")[$i])
+                    ) {
+                        $competence = new Competence();
+                        $competence->setDesignation($request->request->get("competence_design")[$i])
+                            ->setNiveauPourcent($request->request->get("competence_pourcent")[$i])
+                            ->setUserForCv($repo->find($userForCv->getId()));
+                        $entityManager->persist($competence);
                         $entityManager->flush();
                     }
                 }
-                
+
+                #insertion des langues qui est un tableau de langue
+                $t_langue_design = $request->request->get("langue_design");
+                for ($i = 0; $i < count($t_langue_design); $i++) {
+                    if (
+                        !empty($request->request->get("langue_design")[$i])
+                        && !empty($request->request->get("langue_pourcent")[$i])
+                    ) {
+                        $langue = new Langue();
+                        $langue->setDesignation($request->request->get("langue_design")[$i])
+                            ->setNiveauPourcent($request->request->get("langue_pourcent")[$i])
+                            ->setUserForCv($repo->find($userForCv->getId()));
+                        $entityManager->persist($langue);
+                        $entityManager->flush();
+                    }
+                }
+
+                #insertion centre d'interet qui est un tableau de centre d'interet
+                $t_centre_interet_design = $request->request->get("centre_interet_design");
+                for ($i = 0; $i < count($t_centre_interet_design); $i++) {
+                    if (
+                        !empty($request->request->get("centre_interet_design")[$i])
+                    ) {
+                        $centre_interet = new CentreInteret();
+                        $centre_interet->setDesignation($request->request->get("centre_interet_design")[$i])
+                            ->setUserForCv($repo->find($userForCv->getId()));
+                        $entityManager->persist($centre_interet);
+                        $entityManager->flush();
+                    }
+                }
+                #insertion logiciel qui est un tableau de logiciel
+                $t_logiciel_design = $request->request->get("logiciel_design");
+                for ($i = 0; $i < count($t_logiciel_design); $i++) {
+                    if (
+                        !empty($request->request->get("logiciel_design")[$i]
+                            && !empty($request->request->get("logiciel_pourcent")[$i]))
+                    ) {
+                        $logiciel = new Logiciel();
+                        $logiciel->setDesignation($request->request->get("logiciel_design")[$i])
+                            ->setNiveauPourcent($request->request->get("logiciel_pourcent")[$i])
+                            ->setUserForCv($repo->find($userForCv->getId()));
+                        $entityManager->persist($logiciel);
+                        $entityManager->flush();
+                    }
+                }
+
+                #insertion de la formation qui est un tableau de formation
+                $t_formation  = $request->request->get("formation_diplome");
+                for ($i = 0; $i < count($t_formation); $i++) {
+                    if (
+                        !empty($request->request->get("formation_diplome")[$i]
+                            && !empty($request->request->get("formation_annee")[$i])
+                            && !empty($request->request->get("formation_ville")[$i])
+                            && !empty($request->request->get("formation_pays")[$i])
+                            && !empty($request->request->get("formation_ecole")[$i]))
+                    ) {
+                        $formation = new Formation();
+                        $formation->setDiplome($request->request->get("formation_diplome")[$i])
+                            ->setAnnee($request->request->get("formation_annee")[$i])
+                            ->setVille($request->request->get("formation_ville")[$i])
+                            ->setPays($request->request->get("formation_pays")[$i])
+                            ->setEcoleObtention($request->request->get("formation_ecole")[$i])
+                            ->setUserForCv($repo->find($userForCv->getId()));
+                        $entityManager->persist($formation);
+                        $entityManager->flush();
+                    }
+                }
+
+                #insertion experience professionnelle qui est un tableau d'experience professionnelle
+                $t_experience = $request->request->get("experience_pro_entreprise");
+
+                for ($i = 0; $i < count($t_experience); $i++) {
+                    if (
+                        !empty($request->request->get("experience_pro_entreprise")[$i])
+                        && !empty($request->request->get("experience_pro_poste")[$i])
+                        && !empty($request->request->get("experience_pro_annee")[$i])
+                        && !empty($request->request->get("experience_pro_tache")[$i])
+                    ) {
+                        $experience_pro = new ExperienceProfessionnelle();
+                        $experience_pro->setUserForCv($repo->find($userForCv->getId()))
+                            ->setNomEntreprise($request->request->get("experience_pro_entreprise")[$i])
+                            ->setPosteOccupe($request->request->get("experience_pro_poste")[$i])
+                            ->setAnneeOccupation($request->request->get("experience_pro_annee")[$i]);
+                        #enlevons les retours au chariot
+                        $t_tache = preg_replace('/\s\s+/', ' ', $request->request->get("experience_pro_tache")[$i]);
+
+                        $entityManager->persist($experience_pro);
+                        $entityManager->flush();
+
+                        if ($experience_pro->getId() != 0) {
+                            $tache = new TacheEffectuer();
+                            $tache->setDescription($t_tache)
+                                ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
+                            $entityManager->persist($tache);
+                            $entityManager->flush();
+                        }
+                    }
+                }
+                #pour la recuperation des experiences professionnelles
+                // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
+                // $t_tache= explode(';',$t_tache);
+                //dump($request->request->get("experience_pro_entreprise"));
+
+                #generons maintenant le numero de cv qui sera propre à un user
+                if ($userForCv->getId() != 0) {
+                    $num_cv = new Cv();
+                    $num_cv->setUserForCv($repo->find($userForCv->getId()))
+                        ->setNumCv(rand(1, 10000));
+                    $entityManager->persist($num_cv);
+                    $entityManager->flush();
+
+                    $this->addFlash('succes', "Un nouveau cv a été créé");
+                    return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
+                }
             }
-            #pour la recuperation des experiences professionnelles
-            // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
-            // $t_tache= explode(';',$t_tache);
-            //dump($request->request->get("experience_pro_entreprise"));
-            
-            #generons maintenant le numero de cv qui sera propre à un user
-            if($userForCv->getId() != 0){
-                $num_cv = new Cv();
-                $num_cv->setUserForCv($repo->find($userForCv->getId()))
-                ->setNumCv(rand(1,10000));
-                $entityManager->persist($num_cv);
-                $entityManager->flush();
-
-                $this->addFlash('succes',"Un nouveau cv a été créé");
-                return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
-           }
-        }
-
         }
 
         return $this->renderForm('admin/user_for_cv/new.html.twig', [
@@ -361,20 +373,164 @@ class UserForCvController extends AbstractController
     /**
      * @Route("/{id}/edit", name="cv_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, UserForCv $userForCv): Response
-    {
-        $form = $this->createForm(UserForCv1Type::class, $userForCv);
+    public function edit(
+        Request $request,
+        UserForCv $userForCv,
+        ContactRepository $c,
+        ProfilRepository $p
+    ): Response {
+        $form = $this->createForm(UserForCvType::class, $userForCv);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
         }
 
+        //$contacts = $c->findBy(['userForCv'=>$userForCv->getId()]);
+        $con = $c->findContactUser($userForCv->getId());
+        $contact = new Contact();
+        $contact->setAdresse($con->getAdresse())
+            ->setTel($con->getTel())
+            ->setEmail($con->getEmail());
+        $formContact = $this->createForm(ContactType::class, $contact);
+        $formContact->handleRequest($request);
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
+            //dd($con);
+            $con->setAdresse($request->request->get("contact")["adresse"])
+                ->setTel($con->getTel($request->request->get("contact")["tel"]))
+                ->setEmail($con->getEmail($request->request->get("contact")["email"]))
+                ->setUserForCv($userForCv);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($con);
+            $entityManager->flush();
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        #modification du profil cv de l'utilisateur courant
+        $pro = $p->findByProfilUser($userForCv->getId());
+        $profile  = new Profil();
+        $profile->setDescription($pro->getDescription())
+            ->setUserForCv($userForCv);
+
+        $formProfil = $this->createForm(ProfilType::class, $profile);
+        $formProfil->handleRequest($request);
+        if ($formProfil->isSubmitted() && $formProfil->isValid()) {
+            //dd($request);
+            $pro->setDescription($request->request->get("profil")["description"])
+                ->setUserForCv($userForCv);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($pro);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        #ajouter une nouvelle langue sur la page de modification
+        #si le bouton addLangue est cliqué
+        if ($request->request->get('langue')) {
+            $ligne = '
+            <tr>
+                 <td><input type="text" class="form-control" id="langue_design[]" name="langue_design[]"></td>
+                 <td><select name="langue_pourcent[]" class="form-control" id="langue_pourcent[]">
+                                <option >niveau de pourcent</option>
+                                <option value="10">10%</option>
+                                <option value="20">20%</option>
+                                <option value="30">30%</option>
+                                <option value="40">40%</option>
+                                <option value="50">50%</option>
+                                <option value="60">60%</option>
+                                <option value="70">70%</option>
+                                <option value="80">80%</option>
+                                <option value="90">90%</option>
+                                <option value="100">100%</option>
+                            </select>
+                        </td>
+                        <td><button class="btn btn-danger remove_langue">-</button></td>                      
+                        </tr>';
+            return new JsonResponse($ligne, 200);
+        }
+        #pour afficher la possibilite de cocher oui ou non pour un ajout quelconque
+        $reponse = new Reponse();
+
+        $formLangue = $this->createForm(RepLangueType::class, $reponse);
+
+        $formLangue->handleRequest($request);
+        if ($formLangue->isSubmitted() && $formLangue->isValid()) {
+            #insertion des langues qui est un tableau de langue
+            //dd($request);
+            $t_langue_design = $request->request->get("langue_design");
+            for ($i = 0; $i < count($t_langue_design); $i++) {
+                if (
+                    !empty($request->request->get("langue_design")[$i])
+                    && !empty($request->request->get("langue_pourcent")[$i])
+                ) {
+                    $langue = new Langue();
+                    $langue->setDesignation($request->request->get("langue_design")[$i])
+                        ->setNiveauPourcent($request->request->get("langue_pourcent")[$i])
+                        ->setUserForCv($userForCv);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($langue);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                }
+            }
+        }
+          #si le bouton add logiciel est clique
+          if ($request->request->get('logiciel')) {
+            $ligne = '
+            <tr>
+            <td><input type="text" class="form-control" id="logiciel_design[]" name="logiciel_design[]"></td>
+            <td>
+                <select name="logiciel_pourcent[]" class="form-control" id="logiciel_pourcent[]">
+                    <option >niveau de pourcent</option>
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                    <option value="80">80%</option>
+                    <option value="90">90%</option>
+                    <option value="100">100%</option>
+                </select>
+            </td>
+            <td><button class="btn btn-danger remove_logiciel">-</button></td>                      
+        </tr>';
+            return new JsonResponse($ligne, 200);
+        }
+        #pour l'ajout d'un logiciel dans la page d'editon
+        $formLogiciel = $this->createForm(RepLogicielType::class,$reponse);
+        $formLogiciel->handleRequest($request);
+        if($formLogiciel->isSubmitted()&&$formLogiciel->isValid()){
+            #insertion logiciel qui est un tableau de logiciel
+            $t_logiciel_design = $request->request->get("logiciel_design");
+            for ($i = 0; $i < count($t_logiciel_design); $i++) {
+                if (
+                    !empty($request->request->get("logiciel_design")[$i]
+                        && !empty($request->request->get("logiciel_pourcent")[$i]))
+                ) {
+                    $logiciel = new Logiciel();
+                    $logiciel->setDesignation($request->request->get("logiciel_design")[$i])
+                        ->setNiveauPourcent($request->request->get("logiciel_pourcent")[$i])
+                        ->setUserForCv($userForCv);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($logiciel);
+                    $entityManager->flush();
+                    #je dois ajouter les message flash
+                    //return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                }
+            }
+        }
         return $this->renderForm('admin/user_for_cv/edit.html.twig', [
-            'user_for_cv' => $userForCv,
+            'userforcv' => $userForCv,
             'form' => $form,
+            'contact' => $formContact,
+            'profil' => $formProfil,
+            'RepFormLangue' => $formLangue,
+            'RepFormLogiciel'=>$formLogiciel
         ]);
     }
 
@@ -390,5 +546,97 @@ class UserForCvController extends AbstractController
         }
 
         return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
+    }
+    /**
+     * @Route("/{id}/lg/{id_lg}/edit", name="cv_edit_lg",methods={"POST","GET"})
+     */
+    public function edit_langue(Request $request, UserForCv $userForCv, $id_lg, LangueRepository $l)
+    {
+        $langue = $l->find($id_lg);
+        $langue->setDesignation($langue->getDesignation())
+            ->setNiveauPourcent($langue->getNiveauPourcent());
+
+        $form = $this->createForm(LangueType::class, $langue);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $langue->setDesignation($request->request->get("langue")["designation"])
+                ->setNiveauPourcent($request->request->get("langue")["niveau_pourcent"]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($langue);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            "admin/user_for_cv/langue_edit.html.twig",
+            [
+                'form' => $form,
+                'langue' => $l->find($id_lg),
+                'userForcv' => $userForCv
+            ]
+        );
+    }
+    /**
+     * @Route("/{id}/del_lg",name="del_lg",methods={"POST","GET"})
+     */
+    public function delete_langue(Request $request, UserForCv $userForCv, LangueRepository $l)
+    {
+        $id_lg = $request->request->get("idL");
+        if ($l->find($id_lg)) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($l->find($id_lg));
+            $entityManager->flush();
+            $response = "ok";
+        } else {
+            $response = "bad";
+        }
+        return new JsonResponse($response, 200);
+        // return new JsonResponse(
+        //     ["designation"=>$l->find($id_lg)->getDesignation(),
+        // "pourcentage"=>$l->find($id_lg)->getNiveauPourcent()],200);
+    }
+    /**
+     * @Route("/{id}/log/{id_log}/edit", name="cv_edit_log",methods={"POST","GET"})
+     */
+    public function edit_logiciel(Request $request, UserForCv $userForCv, $id_log, LogicielRepository $l)
+    {
+        $logiciel = $l->find($id_log);
+        $logiciel->setDesignation($logiciel->getDesignation())
+            ->setNiveauPourcent($logiciel->getNiveauPourcent());
+
+        $form = $this->createForm(LogicielType::class, $logiciel);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $logiciel->setDesignation($request->request->get("logiciel")["designation"])
+                ->setNiveauPourcent($request->request->get("logiciel")["niveau_pourcent"]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($logiciel);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            "admin/user_for_cv/logiciel_edit.html.twig",
+            [
+                'form' => $form,
+                'logiciel' => $l->find($id_log),
+                'userForcv' => $userForCv
+            ]
+        );
+    }
+    /**
+     * @Route("/{id}/del_log",name="del_log",methods={"POST","GET"})
+     */
+    public function delete_logiciel(Request $request, UserForCv $userForCv, LogicielRepository $l, EntityManagerInterface $em)
+    {
+        $id_log = $request->request->get("idLog");
+         if ($l->find($id_log)) {
+             $em->remove($l->find($id_log));
+             $em->flush();
+             $response = "ok";
+        } else {
+             $response = "non";
+        }
+        return new JsonResponse($response, 200);
     }
 }

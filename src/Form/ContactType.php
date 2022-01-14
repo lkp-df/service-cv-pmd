@@ -15,7 +15,6 @@ class ContactType extends AbstractType
             ->add('tel')
             ->add('adresse')
             ->add('email')
-            ->add('userForCv')
         ;
     }
 

@@ -13,7 +13,6 @@ class ProfilType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('userForCv')
         ;
     }
 

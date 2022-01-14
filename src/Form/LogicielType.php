@@ -14,7 +14,6 @@ class LogicielType extends AbstractType
         $builder
             ->add('designation')
             ->add('niveau_pourcent')
-            ->add('userForCv')
         ;
     }
 

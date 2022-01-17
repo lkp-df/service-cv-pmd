@@ -15,7 +15,6 @@ class ExperienceProfessionnelleType extends AbstractType
             ->add('nomEntreprise')
             ->add('posteOccupe')
             ->add('anneeOccupation')
-            ->add('userForCv')
         ;
     }
 

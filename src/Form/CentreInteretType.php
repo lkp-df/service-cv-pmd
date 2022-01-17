@@ -13,7 +13,6 @@ class CentreInteretType extends AbstractType
     {
         $builder
             ->add('designation')
-            ->add('userForCv')
         ;
     }
 

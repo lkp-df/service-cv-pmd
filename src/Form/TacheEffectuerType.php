@@ -13,7 +13,6 @@ class TacheEffectuerType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('experienceProfessionnelle')
         ;
     }
 

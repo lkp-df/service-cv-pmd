@@ -22,20 +22,31 @@ use App\Form\RepFormationType;
 use App\Repository\UserForCvRepository;
 use App\Entity\ExperienceProfessionnelle;
 use App\Entity\MonContact;
+use App\Form\CentreInteretType;
+use App\Form\CompetenceType;
 use App\Form\ContactType;
+use App\Form\ExperienceProfessionnelleType;
+use App\Form\FormationType;
 use App\Form\LangueType;
 use App\Form\LogicielType;
 use App\Form\ProfilType;
+use App\Form\RepCentreInteretType;
+use App\Form\RepCompetenceType;
 use App\Form\RepLangueType;
+use App\Form\TacheEffectuerType;
+use App\Repository\CentreInteretRepository;
+use App\Repository\CompetenceRepository;
 use App\Repository\ContactRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\ExperienceProfessionnelleRepository;
+use App\Repository\FormationRepository;
 use App\Repository\LangueRepository;
 use App\Repository\LogicielRepository;
 use App\Repository\ProfilRepository;
+use App\Repository\TacheEffectuerRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -477,8 +488,8 @@ class UserForCvController extends AbstractController
                 }
             }
         }
-          #si le bouton add logiciel est clique
-          if ($request->request->get('logiciel')) {
+        #si le bouton add logiciel est clique
+        if ($request->request->get('logiciel')) {
             $ligne = '
             <tr>
             <td><input type="text" class="form-control" id="logiciel_design[]" name="logiciel_design[]"></td>
@@ -502,9 +513,9 @@ class UserForCvController extends AbstractController
             return new JsonResponse($ligne, 200);
         }
         #pour l'ajout d'un logiciel dans la page d'editon
-        $formLogiciel = $this->createForm(RepLogicielType::class,$reponse);
+        $formLogiciel = $this->createForm(RepLogicielType::class, $reponse);
         $formLogiciel->handleRequest($request);
-        if($formLogiciel->isSubmitted()&&$formLogiciel->isValid()){
+        if ($formLogiciel->isSubmitted() && $formLogiciel->isValid()) {
             #insertion logiciel qui est un tableau de logiciel
             $t_logiciel_design = $request->request->get("logiciel_design");
             for ($i = 0; $i < count($t_logiciel_design); $i++) {
@@ -519,8 +530,130 @@ class UserForCvController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($logiciel);
                     $entityManager->flush();
-                    #je dois ajouter les message flash
-                    //return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                }
+            }
+            #je dois ajouter les message flash
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        #ajouter une competence
+        if ($request->request->get('competence')) {
+            $ligne = '<tr>';
+            $ligne .= '
+            <td><input type="text" class="form-control" id="competence_design[]" name="competence_design[]"></td>
+            <td><select name="competence_pourcent[]" class="form-control" id="competence_pourcent[]">
+                <option >niveau de pourcent</option>
+                <option value="10">10%</option>
+                <option value="20">20%</option>
+                <option value="30">30%</option>
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="60">60%</option>
+                <option value="70">70%</option>
+                <option value="80">80%</option>
+                <option value="90">90%</option>
+                <option value="100">100%</option>
+            </select></td>
+            <td><button class="btn btn-danger remove_competence">-</button></td>
+            </tr>';
+            return new JsonResponse($ligne, 200);
+        }
+        $formCompetence = $this->createForm(RepCompetenceType::class, $reponse);
+        $formCompetence->handleRequest($request);
+        if ($formCompetence->isSubmitted() && $formCompetence->isValid()) {
+            $t_competence_design = $request->request->get("competence_design");
+
+            for ($i = 0; $i < count($t_competence_design); $i++) {
+                if (
+                    !empty($request->request->get("competence_design")[$i])
+                    && !empty($request->request->get("competence_pourcent")[$i])
+                ) {
+                    $competence = new Competence();
+                    $competence->setDesignation($request->request->get("competence_design")[$i])
+                        ->setNiveauPourcent($request->request->get("competence_pourcent")[$i])
+                        ->setUserForCv($userForCv);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($competence);
+                    $entityManager->flush();
+                }
+            }
+            #add message flash
+        }
+        #pour le centre d'interet
+        #si le bouton add centre intert est clique
+        if ($request->request->get('centreInteret')) {
+            $ligne = '
+            <tr>
+                    <td><input type="text" class="form-control" id="centre_interet_design[]" name="centre_interet_design[]"></td>
+                    <td><button class="btn btn-danger remove_centre_interet">-</button></td>                      
+            </tr>';
+            return new JsonResponse($ligne, 200);
+        }
+        $formCentreInteret = $this->createForm(RepCentreInteretType::class, $reponse);
+        $formCentreInteret->handleRequest($request);
+        if (
+            $formCentreInteret->isSubmitted()
+            && $formCentreInteret->isValid()
+        ) {
+            //    dd($request);
+            $t_centre_interet_design = $request->request->get("centre_interet_design");
+            for ($i = 0; $i < count($t_centre_interet_design); $i++) {
+                if (
+                    !empty($request->request->get("centre_interet_design")[$i])
+                ) {
+                    $centre_interet = new CentreInteret();
+                    $centre_interet->setDesignation($request->request->get("centre_interet_design")[$i])
+                        ->setUserForCv($userForCv);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($centre_interet);
+                    $entityManager->flush();
+                }
+            }
+            #add message flash
+
+        }
+        #pour la formation
+        #si le bouton add formation est cliqué
+        if ($request->request->get('formation')) {
+            $ligne = '
+                <tr>
+                    <td><input type="text" class="form-control" id="formation_diplome[]" name="formation_diplome[]"></td>
+                    <td><input type="text" class="form-control" id="formation_annee[]" name="formation_annee[]"></td>
+                    <td><input type="text" class="form-control" id="formation_ville[]" name="formation_ville[]"></td>
+                    <td><input type="text" class="form-control" id="formation_pays[]" name="formation_pays[]"></td>
+                    <td><input type="text" class="form-control" id="formation_ecole[]" name="formation_ecole[]"></td>
+                    <td><button class="btn btn-danger remove_formation">-</button></td>                      
+                </tr>
+                    ';
+            return new JsonResponse($ligne, 200);
+        }
+        $formFormation = $this->createForm(RepFormationType::class, $reponse);
+        $formFormation->handleRequest($request);
+        if (
+            $formFormation->isSubmitted()
+            && $formFormation->isValid()
+        ) {
+            //dd($request);
+            #insertion de la formation qui est un tableau de formation
+            $t_formation  = $request->request->get("formation_diplome");
+            for ($i = 0; $i < count($t_formation); $i++) {
+                if (
+                    !empty($request->request->get("formation_diplome")[$i]
+                        && !empty($request->request->get("formation_annee")[$i])
+                        && !empty($request->request->get("formation_ville")[$i])
+                        && !empty($request->request->get("formation_pays")[$i])
+                        && !empty($request->request->get("formation_ecole")[$i]))
+                ) {
+                    $formation = new Formation();
+                    $formation->setDiplome($request->request->get("formation_diplome")[$i])
+                        ->setAnnee($request->request->get("formation_annee")[$i])
+                        ->setVille($request->request->get("formation_ville")[$i])
+                        ->setPays($request->request->get("formation_pays")[$i])
+                        ->setEcoleObtention($request->request->get("formation_ecole")[$i])
+                        ->setUserForCv($userForCv);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($formation);
+                    $entityManager->flush();
                 }
             }
         }
@@ -530,7 +663,10 @@ class UserForCvController extends AbstractController
             'contact' => $formContact,
             'profil' => $formProfil,
             'RepFormLangue' => $formLangue,
-            'RepFormLogiciel'=>$formLogiciel
+            'RepFormLogiciel' => $formLogiciel,
+            'RepFormCompetence' => $formCompetence,
+            'RepCentreInteret' => $formCentreInteret,
+            'RepFormation' => $formFormation
         ]);
     }
 
@@ -630,13 +766,245 @@ class UserForCvController extends AbstractController
     public function delete_logiciel(Request $request, UserForCv $userForCv, LogicielRepository $l, EntityManagerInterface $em)
     {
         $id_log = $request->request->get("idLog");
-         if ($l->find($id_log)) {
-             $em->remove($l->find($id_log));
-             $em->flush();
-             $response = "ok";
+        if ($l->find($id_log)) {
+            $em->remove($l->find($id_log));
+            $em->flush();
+            $response = "ok";
         } else {
-             $response = "non";
+            $response = "non";
         }
         return new JsonResponse($response, 200);
+    }
+
+    /**
+     * @Route("/{id}/comp/{id_comp}/edit",name="cv_edit_comp",methods={"POST","GET"})
+     */
+    public function edit_competence(
+        Request $request,
+        UserForCv $userForCv,
+        $id_comp,
+        CompetenceRepository $c,
+        EntityManagerInterface $em
+    ) {
+        $competence = $c->find($id_comp);
+        $competence->setDesignation($competence->getDesignation())
+            ->setNiveauPourcent($competence->getNiveauPourcent());
+        $formCompetence = $this->createForm(CompetenceType::class, $competence);
+        $formCompetence->handleRequest($request);
+        if ($formCompetence->isSubmitted() && $formCompetence->isValid()) {
+            $competence->setDesignation($request->request->get("competence")["designation"])
+                ->setNiveauPourcent($request->request->get("competence")["niveau_pourcent"])
+                ->setUserForCv($userForCv);
+            $em->persist($competence);
+            $em->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            'admin/user_for_cv/competence_edit.html.twig',
+            [
+                'competence' => $c->find($id_comp),
+                'form' => $formCompetence,
+                'userForcv' => $userForCv
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{id}/del_comp",name="del_comp",methods={"POST","GET"})
+     */
+    public function delete_competence(
+        Request $request,
+        UserForCv $userForCv,
+        CompetenceRepository $c,
+        EntityManagerInterface $em
+    ) {
+        $id_comp = $request->request->get("idComp");
+        if ($c->find($id_comp)) {
+            $em->remove($c->find($id_comp));
+            $em->flush();
+            $response = "ok";
+        } else {
+            $response = 'non';
+        }
+        return new JsonResponse($response, 200);
+    }
+    /**
+     * @Route("/{id}/ci/{id_ci}/edit",name="cv_edit_ci",methods={"POST","GET"})
+     */
+    public function edit_centre_interet(
+        Request $request,
+        UserForCv $userForCv,
+        CentreInteretRepository $ci,
+        EntityManagerInterface $em,
+        $id_ci
+    ) {
+        $centre_interet = $ci->find($id_ci);
+        $centre_interet->setDesignation($centre_interet->getDesignation());
+        $form = $this->createForm(CentreInteretType::class, $centre_interet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //dd($request);
+            $centre_interet->setDesignation($request->request->get("centre_interet")["designation"])
+                ->setUserForCv($userForCv);
+            $em->persist($centre_interet);
+            $em->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            "admin/user_for_cv/centre_interet_edit.html.twig",
+            [
+                "centreInteret" => $ci->find($id_ci),
+                "form" => $form,
+                "userForcv" => $userForCv
+            ]
+        );
+    }
+    /**
+     * @Route("/{id}/del_ci",name="del_ci",methods={"POST","GET"})
+     */
+    public function delete_centre_interet(
+        Request $request,
+        EntityManagerInterface $em,
+        CentreInteretRepository $ci
+    ) {
+        $id_ci = $request->request->get("idCi");
+        if ($ci->find($id_ci)) {
+            $em->remove($ci->find($id_ci));
+            $em->flush();
+            $response = "ok";
+        } else {
+            $response = "non";
+        }
+        return new JsonResponse($response, 200);
+    }
+    /**
+     * @Route("/{id}/for/{id_forma}/edit",name="cv_edit_forma",methods={"POST","GET"})
+     */
+    public function edit_formation(
+        Request $request,
+        UserForCv $userForCv,
+        FormationRepository $fo,
+        EntityManagerInterface $em,
+        $id_forma
+    ) {
+        $formation = $fo->find($id_forma);
+        $formation->setDiplome($formation->getDiplome())
+            ->setAnnee($formation->getAnnee())
+            ->setEcoleObtention($formation->getEcoleObtention())
+            ->setVille($formation->getVille())
+            ->setPays($formation->getPays());
+        $form = $this->createForm(FormationType::class, $formation);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //dd($request);
+            $formation->setDiplome($request->request->get("formation")["diplome"])
+                ->setAnnee($request->request->get("formation")["annee"])
+                ->setEcoleObtention($request->request->get("formation")["ecoleObtention"])
+                ->setVille($request->request->get("formation")["Ville"])
+                ->setPays($request->request->get("formation")["pays"])
+                ->setUserForCv($userForCv);
+            $em->persist($formation);
+            $em->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            "admin/user_for_cv/formation_edit.html.twig",
+            [
+                "formation" => $fo->find($id_forma),
+                "form" => $form,
+                "userForcv" => $userForCv
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{id}/del_for",name="del_forma",methods={"POST","GET"})
+     */
+    public function delete_formation(
+        Request $request,
+        EntityManagerInterface $em,
+        FormationRepository $fo
+    ) {
+        $id_fo = $request->request->get("idFo");
+        if ($fo->find($id_fo)) {
+            $em->remove($fo->find($id_fo));
+            $em->flush();
+            $response = "ok";
+        } else {
+            $response = "non";
+        }
+        return new JsonResponse($response, 200);
+    }
+
+    /**
+     * @Route("/{id}/exp/{id_exp}/edit",name="cv_edit_exp",methods={"POST","GET"})
+     */
+    public function edit_experience_pro(
+        Request $request,
+        UserForCv $userForCv,
+        ExperienceProfessionnelleRepository $exp,
+        EntityManagerInterface $em,
+        $id_exp
+    ) {
+        $experience_pro = $exp->find($id_exp);
+        $experience_pro->setNomEntreprise($experience_pro->getNomEntreprise())
+            ->setPosteOccupe($experience_pro->getPosteOccupe())
+            ->setAnneeOccupation($experience_pro->getAnneeOccupation());
+
+        $form = $this->createForm(ExperienceProfessionnelleType::class, $experience_pro);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            dd($request);
+            $experience_pro->setNomEntreprise($request->request->get("")[""])
+                ->setPosteOccupe($request->request->get("")[""])
+                ->setAnneeOccupation($request->request->get("")[""])
+                ->setUserForCv($userForCv);
+            $em->persist($experience_pro);
+            $em->flush();
+
+            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm(
+            "admin/user_for_cv/experience_pro_edit.html.twig",
+            [
+                "experience" => $exp->find($id_exp),
+                "form" => $form,
+                "userForcv" => $userForCv
+            ]
+        );
+    }
+    /**
+     * @Route("/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience",methods={"POST","GET"})
+     */
+    public function edit_tache_experience(
+        Request $request,
+        UserForCv $userForCv,
+        $id_exp,
+        $id_tache,
+        TacheEffectuerRepository $ta,
+        ExperienceProfessionnelleRepository $exp
+    ) {
+        $tache = $ta->find($id_tache);
+        $tache->setDescription($tache->getDescription());
+        $form = $this->createForm(TacheEffectuerType::class, $tache);
+        $form->handleRequest($request);
+        if (
+            $form->isSubmitted()
+            && $form->isValid()
+        ) {
+            dd($request);
+        }
+        return $this->renderForm(
+            'admin/user_for_cv/tache_experience_edit.html.twig',
+            [
+                'form' => $form,
+                'userForcv' => $userForCv,
+                'tache' => $ta->find($id_tache),
+                'experience'=>$exp->find($id_exp)
+            ]
+        );
     }
 }

@@ -17,7 +17,6 @@ class FormationType extends AbstractType
             ->add('pays')
             ->add('diplome')
             ->add('ecoleObtention')
-            ->add('userForCv')
         ;
     }
 

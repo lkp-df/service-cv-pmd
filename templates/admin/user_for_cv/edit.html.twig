@@ -966,6 +966,51 @@
                     </tbody>
                     {% endfor %} {% else %} no records founds {% endif %}
                 </table>
+                <h3>Voulez-vous ajouter une autre Experience Professionnelle ?</h3>
+                {{ form_start(RepExperience) }}
+                <div class="row">
+                    {{ form_row(RepExperience.reponse) }} {{ form_row(RepExperience._token) }}
+                    <div class="col-md-12">
+                        <div id="show_experience_pro">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            Poste Occupé
+                                        </th>
+                                        <th scope="col">
+                                            Entreprise
+                                        </th>
+                                        <th scope="col">
+                                            Année
+                                        </th>
+                                        <th scope="col">
+                                            Taches
+                                        </th>
+                                        <th scope="col">
+                                            action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="affiche_experience">{# coming some place #}
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn btn-success add_experience_pro">
+                                            +
+                                                                                        
+                                        </a> {{ btn.add() }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(RepExperience) }}
             </div>
             <div class="card-footer">
                 {{ link.back(path('cv_index'),'back to list') }}
@@ -1001,7 +1046,7 @@
                     }
                 }
             }
-        })
+        });
         $('.del_log').click(function() {
             let id = $(this).data('delete');
             if (!isNaN(id)) {
@@ -1027,7 +1072,7 @@
                     }
                 }
             }
-        })
+        });
         $('.del_comp').click(function() {
             let idComp = $(this).data("delete");
             if (confirm("Voulez-vous supprimer cette compétence ?")) {
@@ -1048,7 +1093,7 @@
                     }
                 })
             }
-        })
+        });
 
         $('.del_ci').click(function() {
             let idCi = $(this).data("delete");
@@ -1070,29 +1115,50 @@
                     }
                 })
             }
-        })
+        });
         $('.del_forma').click(function() {
-                let idFo = $(this).data("delete");
-                if (confirm("Voulez-vous supprimer cette formation?")) {
-                    $.ajax({
-                        url: '{{ path("del_forma",{"id":userforcv.id}) }}',
-                        method: 'POST',
-                        dataType: 'JSON',
-                        data: {
-                            idFo: idFo
-                        },
-                        success: function(data) {
-                            if (data == "ok") {
-                                alert("Formation supprimée correctement");
-                                window.location.href = "";
-                            } else {
-                                alert("Suppression Impossible :(");
-                            }
+            let idFo = $(this).data("delete");
+            if (confirm("Voulez-vous supprimer cette formation?")) {
+                $.ajax({
+                    url: '{{ path("del_forma",{"id":userforcv.id}) }}',
+                    method: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idFo: idFo
+                    },
+                    success: function(data) {
+                        if (data == "ok") {
+                            alert("Formation supprimée correctement");
+                            window.location.href = "";
+                        } else {
+                            alert("Suppression Impossible :(");
                         }
-                    })
-                }
-            })
-            /******** Add and remove ********/
+                    }
+                })
+            }
+        });
+        $('.del_experience').click(function() {
+            let idExp = $(this).data("delete");
+            if (confirm("Voulez-vous supprimer cette Experence Professionnelle ?")) {
+                $.ajax({
+                    url: '{{ path("del_exp",{"id":userforcv.id}) }}',
+                    method: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        idExp: idExp
+                    },
+                    success: function(data) {
+                        if (data == "ok") {
+                            alert("Experience Professionnelle supprimée correctement");
+                            window.location.href = "";
+                        } else {
+                            alert("Suppression Impossible :(");
+                        }
+                    }
+                })
+            }
+        });
+        /******** Add and remove ********/
         $(document).on('click', '.remove_langue', function() {
             $(this).closest('tr').remove();
         });
@@ -1157,6 +1223,20 @@
         });
         $(document).on("click", ".remove_formation", function() {
             $(this).closest("tr").remove();
+        });
+
+        $(".add_experience_pro").click(function() {
+            addExperiencePro();
+        });
+        $(document).on("click", ".remove_experience_pro", function() {
+            $(this).closest("tr").remove();
+        });
+        $("#show_experience_pro").hide(500);
+        $("#rep_experience_pro_reponse_0").click(function() {
+            $("#show_experience_pro").show(500);
+        });
+        $("#rep_experience_pro_reponse_1").click(function() {
+            $("#show_experience_pro").hide(500);
         });
         /******** Function part ******/
         addLangue();
@@ -1231,6 +1311,21 @@
                 },
                 success: function(data) {
                     $('#affiche_formation').append(data);
+                }
+            })
+        }
+        addExperiencePro();
+
+        function addExperiencePro() {
+            $.ajax({
+                url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+                method: 'POST',
+                dataType: 'JSON',
+                data: {
+                    experience: 1
+                },
+                success: function(data) {
+                    $('#affiche_experience').append(data);
                 }
             })
         }

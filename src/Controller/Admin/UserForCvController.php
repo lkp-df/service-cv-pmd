@@ -32,7 +32,9 @@ use App\Form\LogicielType;
 use App\Form\ProfilType;
 use App\Form\RepCentreInteretType;
 use App\Form\RepCompetenceType;
+use App\Form\RepExperienceProType;
 use App\Form\RepLangueType;
+use App\Form\RepTacheType;
 use App\Form\TacheEffectuerType;
 use App\Repository\CentreInteretRepository;
 use App\Repository\CompetenceRepository;
@@ -337,18 +339,25 @@ class UserForCvController extends AbstractController
                         $entityManager->flush();
 
                         if ($experience_pro->getId() != 0) {
-                            $tache = new TacheEffectuer();
-                            $tache->setDescription($t_tache)
-                                ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
-                            $entityManager->persist($tache);
-                            $entityManager->flush();
+                            #pour la recuperation des taches dans l'experiences professionnelles
+                            // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
+                            $t_tache = explode(';', $t_tache);
+                            foreach ($t_tache as  $value) {
+                                #eviter d'inserer le dernier espace du au point virgule
+                                if (!empty($value)) {
+                                    $tache = new TacheEffectuer();
+                                    $tache->setDescription($value)
+                                        ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
+                                    $entityManager->persist($tache);
+                                    $entityManager->flush();
+                                }
+                            }
+                            //dump($request->request->get("experience_pro_entreprise"));
+
                         }
                     }
                 }
-                #pour la recuperation des experiences professionnelles
-                // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
-                // $t_tache= explode(';',$t_tache);
-                //dump($request->request->get("experience_pro_entreprise"));
+
 
                 #generons maintenant le numero de cv qui sera propre à un user
                 if ($userForCv->getId() != 0) {
@@ -388,7 +397,8 @@ class UserForCvController extends AbstractController
         Request $request,
         UserForCv $userForCv,
         ContactRepository $c,
-        ProfilRepository $p
+        ProfilRepository $p,
+        ExperienceProfessionnelleRepository $ex
     ): Response {
         $form = $this->createForm(UserForCvType::class, $userForCv);
         $form->handleRequest($request);
@@ -657,6 +667,75 @@ class UserForCvController extends AbstractController
                 }
             }
         }
+        #pour ajouter une experience pro dans la partie edit
+        #si le bouton add experience est cliqué
+        if ($request->request->get('experience')) {
+            $ligne = '
+            <tr>
+                <td><input type="text" class="form-control" id="experience_pro_entreprise[]" name="experience_pro_entreprise[]" placeholder="saisir le nom de l\'entreprise"></td>
+                <td><input type="text" class="form-control" id="experience_pro_poste[]" name="experience_pro_poste[]" placeholder="saisir le poste Occupé"></td>
+                <td><input type="text" class="form-control" id="experience_pro_annee[]" name="experience_pro_annee[]" placeholder="saisir l\'année à laquelle vous avez travaillé dans la société"></td>
+                <td>
+                <textarea placeholder="veuillez separer chaque tache effecuter par un point virgule (;)" name="experience_pro_tache[]" id="experience_pro_tache[]" class="form-control" cols="5" rows="5"></textarea>
+                </td>
+                <td><button class="btn btn-danger remove_experience_pro">-</button></td>                      
+
+            </tr>  
+            ';
+            return new JsonResponse($ligne, 200);
+        }
+
+        $formExperience = $this->createForm(RepExperienceProType::class, $reponse);
+        $formExperience->handleRequest($request);
+        if (
+            $formExperience->isSubmitted()
+            && $formExperience->isValid()
+        ) {
+            //dd($request);
+            #insertion experience professionnelle qui est un tableau d'experience professionnelle
+            $t_experience = $request->request->get("experience_pro_entreprise");
+
+            for ($i = 0; $i < count($t_experience); $i++) {
+                if (
+                    !empty($request->request->get("experience_pro_entreprise")[$i])
+                    && !empty($request->request->get("experience_pro_poste")[$i])
+                    && !empty($request->request->get("experience_pro_annee")[$i])
+                    && !empty($request->request->get("experience_pro_tache")[$i])
+                ) {
+                    $experience_pro = new ExperienceProfessionnelle();
+                    $experience_pro->setUserForCv($userForCv)
+                        ->setNomEntreprise($request->request->get("experience_pro_entreprise")[$i])
+                        ->setPosteOccupe($request->request->get("experience_pro_poste")[$i])
+                        ->setAnneeOccupation($request->request->get("experience_pro_annee")[$i]);
+                    #enlevons les retours au chariot
+                    $t_tache = preg_replace('/\s\s+/', ' ', $request->request->get("experience_pro_tache")[$i]);
+
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($experience_pro);
+                    $entityManager->flush();
+
+                    if ($experience_pro->getId() != 0) {
+                        #pour la recuperation des taches dans l'experiences professionnelles
+                        // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
+                        $t_tache = explode(';', $t_tache);
+                        foreach ($t_tache as  $value) {
+                            #eviter d'inserer le dernier espace du au point virgule
+                            if (!empty($value) && $value !=";") {
+                                $tache = new TacheEffectuer();
+                                $tache->setDescription($value)
+                                    ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $entityManager->persist($tache);
+                                $entityManager->flush();
+                            }
+                        }
+                        //dump($request->request->get("experience_pro_entreprise"));
+
+                    }
+                }
+            }
+            #message flash et redirection sur la meme page
+        }
         return $this->renderForm('admin/user_for_cv/edit.html.twig', [
             'userforcv' => $userForCv,
             'form' => $form,
@@ -666,7 +745,8 @@ class UserForCvController extends AbstractController
             'RepFormLogiciel' => $formLogiciel,
             'RepFormCompetence' => $formCompetence,
             'RepCentreInteret' => $formCentreInteret,
-            'RepFormation' => $formFormation
+            'RepFormation' => $formFormation,
+            'RepExperience' => $formExperience
         ]);
     }
 
@@ -967,15 +1047,81 @@ class UserForCvController extends AbstractController
 
             return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
         }
+        #pour la tache de façon independante
+        #si le bouton add tache est clique
+        if ($request->request->get('tache')) {
+            $ligne = '
+            <tr>
+                    <td><input type="text" class="form-control" id="tache_description[]" name="tache_description[]"></td>
+                    <td><button class="btn btn-danger remove_tache">-</button></td>                      
+            </tr>';
+            return new JsonResponse($ligne, 200);
+        }
+        $reponse = new Reponse();
+        $formTache = $this->createForm(RepTacheType::class, $reponse);
+        $formTache->handleRequest($request);
+        if (
+            $formTache->isSubmitted()
+            && $formTache->isValid()
+        ) {
+            //dd($request);
+            $t_tache_exp = $request->request->get("tache_description");
+
+            for ($i = 0; $i < count($t_tache_exp); $i++) {
+                if (
+                    !empty($request->request->get("tache_description")[$i])
+                ) {
+                    $tache = new TacheEffectuer();
+                    $tache->setDescription($request->request->get("tache_description")[$i])
+                        ->setExperienceProfessionnelle($exp->find($id_exp));
+                    $em->persist($tache);
+                    $em->flush();
+                }
+            }
+            #add message flash
+            return $this->redirectToRoute('cv_edit_exp', [
+                'id' => $userForCv->getId(),
+                'id_exp' => $exp->find($id_exp)->getId()
+            ], Response::HTTP_SEE_OTHER);
+        }
         return $this->renderForm(
             "admin/user_for_cv/experience_pro_edit.html.twig",
             [
                 "experience" => $exp->find($id_exp),
                 "form" => $form,
-                "userForcv" => $userForCv
+                "userForcv" => $userForCv,
+                "RepTache" => $formTache
             ]
         );
     }
+    /**  
+     * @Route("/{id}/del_exp",name="del_exp",methods={"POST","GET"})
+     */
+    public function delete_experience_pro(
+        Request $request,
+        EntityManagerInterface $em,
+        ExperienceProfessionnelleRepository $exp
+
+    ) {
+        $id_exp = $request->request->get("idExp");
+        if ($exp->find($id_exp)) {
+            //allons d'abord supprimer l'enseùble des taches qui depndent d'elle
+            $experience = $exp->find($id_exp);
+            $taches = $experience->getTaches();
+            foreach ($taches as $tache) {
+                $em->remove($tache);
+                $em->flush();
+            }
+            $em->remove($exp->find($id_exp));
+            $em->flush();
+            $response = "ok";
+            #message flash
+        } else {
+            $response = "non";
+        }
+        return new JsonResponse($response, 200);
+    }
+
     /**
      * @Route("/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience",methods={"POST","GET"})
      */
@@ -985,7 +1131,8 @@ class UserForCvController extends AbstractController
         $id_exp,
         $id_tache,
         TacheEffectuerRepository $ta,
-        ExperienceProfessionnelleRepository $exp
+        ExperienceProfessionnelleRepository $exp,
+        EntityManagerInterface $em
     ) {
         $tache = $ta->find($id_tache);
         $tache->setDescription($tache->getDescription());
@@ -995,7 +1142,15 @@ class UserForCvController extends AbstractController
             $form->isSubmitted()
             && $form->isValid()
         ) {
-            dd($request);
+            //dd($request);
+            $tache->setDescription($request->request->get("tache_effectuer")["description"])
+                ->setExperienceProfessionnelle($exp->find($id_exp));
+            $em->persist($tache);
+            $em->flush();
+
+            #message flash
+
+            return $this->redirectToRoute('cv_edit_exp', ['id' => $userForCv->getId(), 'id_exp' => $exp->find($id_exp)->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm(
             'admin/user_for_cv/tache_experience_edit.html.twig',
@@ -1003,8 +1158,27 @@ class UserForCvController extends AbstractController
                 'form' => $form,
                 'userForcv' => $userForCv,
                 'tache' => $ta->find($id_tache),
-                'experience'=>$exp->find($id_exp)
+                'experience' => $exp->find($id_exp)
             ]
         );
+    }
+
+    /**
+     * @Route("/{id}/del_tac",name="del_tache_experience",methods={"POST","GET"})
+     */
+    public function delete_tache_experience_pro(
+        Request $request,
+        EntityManagerInterface $em,
+        TacheEffectuerRepository $ta
+    ) {
+        $id_tac = $request->request->get("idTac");
+        if ($ta->find($id_tac)) {
+            $em->remove($ta->find($id_tac));
+            $em->flush();
+            $response = "ok";
+        } else {
+            $response = "non";
+        }
+        return new JsonResponse($response, 200);
     }
 }

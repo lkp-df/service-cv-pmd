@@ -52,12 +52,20 @@ use App\Repository\TacheEffectuerRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin/cv")
  */
 class UserForCvController extends AbstractController
 {
+    private $translator;
+    private $parent_page;
+    public function __construct(TranslatorInterface $translatorInterface)
+    {
+        $this->parent_page = $translatorInterface->trans('User');
+        $this->translator = $translatorInterface;
+    }
     /**
      * @Route("/", name="cv_index", methods={"GET"})
      */
@@ -1037,10 +1045,10 @@ class UserForCvController extends AbstractController
         $form = $this->createForm(ExperienceProfessionnelleType::class, $experience_pro);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($request);
-            $experience_pro->setNomEntreprise($request->request->get("")[""])
-                ->setPosteOccupe($request->request->get("")[""])
-                ->setAnneeOccupation($request->request->get("")[""])
+            //dd($request);
+            $experience_pro->setNomEntreprise($request->request->get("experience_professionnelle")["nomEntreprise"])
+                ->setPosteOccupe($request->request->get("experience_professionnelle")["posteOccupe"])
+                ->setAnneeOccupation($request->request->get("experience_professionnelle")["anneeOccupation"])
                 ->setUserForCv($userForCv);
             $em->persist($experience_pro);
             $em->flush();

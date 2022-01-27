@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\UserForCv;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class UserForCvType extends AbstractType
 {
@@ -14,9 +16,11 @@ class UserForCvType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('avatar')
-            ->add('poste_recherche_occupe')
-        ;
+            ->add(
+                'avatar'
+                
+            )
+            ->add('poste_recherche_occupe');
     }
 
     public function configureOptions(OptionsResolver $resolver)

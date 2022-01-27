@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\MonProtoCv;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ProtoCvType extends AbstractType
 {
@@ -22,7 +24,29 @@ class ProtoCvType extends AbstractType
             ->add('tel',TextType::class,['attr'=>["placeholder"=>"votre tél",'require'=>true]])
             ->add('poste',TextType::class,['attr'=>["placeholder"=>"votre poste",'require'=>true]])
             ->add('profil',TextareaType::class,['attr'=>["placeholder"=>"votre profil",'require'=>true]])
-            ->add('avatar',TextType::class,['attr'=>['require'=>false]])
+            ->add(
+                'avatar',
+                FileType::class,
+                [
+                    'label' => 'avatar jpg or png',
+                    'multiple' => false,
+                    'required' => false,
+                    'constraints' =>
+                    [
+                        new File(
+                            [
+                                'maxSize' => '1024k',
+                                'mimeTypes' =>
+                                [
+                                    'image/jpeg',
+                                    'image/png'
+                                ],
+                                'mimeTypesMessage'=>'Veuillez choisir une image valide',
+                            ],
+                        )
+                    ]
+                ]
+            )
         ;
     }
 
@@ -30,6 +54,7 @@ class ProtoCvType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'data_class'=>MonProtoCv::class
         ]);
     }
 }

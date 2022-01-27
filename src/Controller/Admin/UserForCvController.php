@@ -205,20 +205,56 @@ class UserForCvController extends AbstractController
         $formFormation = $this->createForm(RepFormationType::class, $rep);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dump($request);
+
+            /*             
+            if ($form_encad_profil->isSubmitted() && $form_encad_profil->isValid()) {
+            //pointons sur le repertoire upload qui contient les image uploadees
+            $upload_dir = $this->getParameter("uploads_directory");
+
+            //supprimons l'ancienne image avec unlink
+            $r = unlink($upload_dir . "/" . $avatar);
+
+            if ($r) {
+                $file = $encadreur->getAvatar();
+                //un nouveau nom avec md5
+                $filename = md5(uniqid()) . "." . $file->guessExtension();
+                //deplacons dans le dossier
+                $file->move($upload_dir, $filename);
+                //modifier l'ancien image par le nouveau nom
+                $encadreur->setAvatar($filename);
+                $manager->persist($encadreur);
+                $manager->flush();
+                return $this->redirectToRoute('gest_encadreur');
+            }
+        }
+             */
+
             if (
                 !empty($request->request->get("proto_cv")["nom"])
                 && !empty($request->request->get("proto_cv")["prenom"])
-                && !empty($request->request->get("proto_cv")["avatar"])
                 && !empty($request->request->get("proto_cv")["poste"])
             ) {
 
+                //inserons l'image du proprietaire du cv
+                //recuperons l'image du cv à partir de mon protoCv
+                $file = $cv->getAvatar();
+
+                //si le user n'a pas choisi d'image
+                if (isset($file)) {
+                    //dd($file);
+                    //creer le dossier de stockage d'image
+                    $upload_dir = $this->getParameter("cv_image_directory");
+                    //generons un nom unique et recuerons l'extension de l'image
+                    $filename = md5(uniqid()) . '.' . $file->guessExtension();
+                    //deplacons le fichier dans le dossier uploads qui est dans public avec le nouveau nom
+                    $file->move($upload_dir, $filename);
+                } //si l'utilisateur n'inserer
 
                 #definissons un new userForCv
                 $userForCv = new UserForCv();
                 $userForCv->setNom($request->request->get("proto_cv")["nom"])
                     ->setPrenom($request->request->get("proto_cv")["prenom"])
-                    ->setAvatar($request->request->get("proto_cv")["avatar"])
+                    ->setAvatar($filename)
                     ->setPosteRechercheOccupe($request->request->get("proto_cv")["poste"]);
 
                 $entityManager = $this->getDoctrine()->getManager();
@@ -375,7 +411,7 @@ class UserForCvController extends AbstractController
                     $entityManager->persist($num_cv);
                     $entityManager->flush();
 
-                    $this->addFlash('succes', "Un nouveau cv a été créé");
+                    $this->addFlash('success', "Un nouveau cv a été créé");
                     return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
                 }
             }
@@ -728,7 +764,7 @@ class UserForCvController extends AbstractController
                         $t_tache = explode(';', $t_tache);
                         foreach ($t_tache as  $value) {
                             #eviter d'inserer le dernier espace du au point virgule
-                            if (!empty($value) && $value !=";") {
+                            if (!empty($value) && $value != ";") {
                                 $tache = new TacheEffectuer();
                                 $tache->setDescription($value)
                                     ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));

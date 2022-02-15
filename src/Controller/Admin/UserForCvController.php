@@ -59,13 +59,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserForCvController extends AbstractController
 {
-    private $translator;
-    private $parent_page;
-    public function __construct(TranslatorInterface $translatorInterface)
-    {
-        $this->parent_page = $translatorInterface->trans('User');
-        $this->translator = $translatorInterface;
-    }
+   
     /**
      * @Route("/", name="cv_index", methods={"GET"})
      */

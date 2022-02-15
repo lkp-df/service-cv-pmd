@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
@@ -12,70 +13,81 @@ class NavExtension extends AbstractExtension
     {
         $this->translator = $translator;
     }
-    public function getFunctions():array
+    public function getFunctions(): array
     {
-        return[
-            new TwigFunction('sidebar',[$this,'getNavs'])
+        return [
+            new TwigFunction('sidebar', [$this, 'getNavs'])
         ];
     }
 
     public function getNavs()
     {
-        return 
-        [
-            'app'=>
+        return
             [
-
-            ],
-            'admin'=>
-            [
+                'app' =>
+                [],
+                'admin' =>
                 [
-                    'name'=>'user',
-                    'icon'=>'fas fa-users',
-                    'links'=>[
-                        [
-                            'name'=>$this->translator->trans('Users'),
-                            'path'=>'user_index',
-                        ],
-                        [
-                            'name'=>$this->translator->trans('User'),
-                            'path'=>'user_new',
-                        ],
-                    ]
-                ]
-            ],
-            'user'=>
-            [
-                
-            ],
-            'dashboard'=>
-            [
-                [
-                    'name'=>$this->translator->trans('Dashboard'),
-                    'icon'=>'fas fa-tachometer-alt',
-                    'links'=>[
-                        [
-                            'name'=>$this->translator->trans('Dashboard').' 1',
-                            'path'=>'admin'
-                        ]
-                    ]
-                ],
-                [
-                    'name'=>'Profil',
-                    'path'=>'profile_index',
-                ],
-                [
-                    'name'=>'App name',
-                    'icon'=>'fa fa-home',
-                    'links'=>
+                    [
+                        'name' => 'cv',
+                        'links' =>
                         [
                             [
-                                'name'=>$this->translator->trans('Home'),
-                                'path'=>'home'
+                                'name' => 'Lists',
+                                'path' => 'cv_index'
+                            ],
+                            [
+                                'name' => 'New',
+                                'path' => 'cv_new'
                             ]
                         ]
+
+                    ],
+                    [
+                        'name' => 'user',
+                        'icon' => 'fas fa-users',
+                        'links' => [
+                            [
+                                'name' => $this->translator->trans('Users'),
+                                'path' => 'user_index',
+                            ],
+                            [
+                                'name' => $this->translator->trans('User'),
+                                'path' => 'user_new',
+                            ],
+                        ]
+                    ]
                 ],
-            ],
-        ];
+                'user' =>
+                [],
+                'dashboard' =>
+                [
+                    [
+                        'name' => $this->translator->trans('Dashboard'),
+                        'icon' => 'fas fa-tachometer-alt',
+                        'links' => [
+                            [
+                                'name' => $this->translator->trans('Dashboard') . ' 1',
+                                'path' => 'admin'
+                            ]
+                        ]
+                    ],
+                    [
+                        'name' => 'Profil',
+                        'path' => 'profile_index',
+                    ],
+                    [
+                        'name' => 'App name',
+                        'icon' => 'fa fa-home',
+                        'links' =>
+                        [
+                            [
+                                'name' => $this->translator->trans('Home'),
+                                'path' => 'home'
+                            ]
+                        ]
+                    ],
+                ],
+            ];
     }
 }

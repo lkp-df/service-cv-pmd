@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %} {% import "macros/link.html.twig" as link %} {% import "macros/button.html.twig" as btn %} {% block title %} New UserForCv {% endblock %} {% block body %}
 <style>
-    img.img-circle {
+    *img.img-circle {
         margin-left: 150px;
     }
 </style>
@@ -313,7 +313,7 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     $('#show_preview + img').remove();
-                    $('#show_preview').after('<img class="img-circle" style="width:40%;height:40%;border-radius:50%" src="' + e.target.result + '" />');
+                    $('#show_preview').after('<img class="img-circle d-block mx-auto" style="width:40%;height:40%;border-radius:50%" src="' + e.target.result + '" />');
                 }
                 reader.readAsDataURL(input.files[0]);
 

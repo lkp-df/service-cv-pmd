@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ModelCv{% endblock %}
+
+{% block body %}
+    <h1>Edit ModelCv</h1>
+
+    {{ include('admin_model_cv/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin_model_cv_index') }}">back to list</a>
+
+    {{ include('admin_model_cv/_delete_form.html.twig') }}
+{% endblock %}

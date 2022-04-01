@@ -28,7 +28,20 @@ class NavExtension extends AbstractExtension
 
             ],
             'admin'=>
-            [
+            [   
+                [
+                    'name'=>'cv',
+                    'links'=>[
+                        [
+                            'name'=>'Cvs',
+                            'path'=>'cv_index',
+                        ],
+                        [
+                            'name'=>'New',
+                            'path'=>'cv_new',
+                        ]
+                    ]
+                ],
                 [
                     'name'=>'user',
                     'icon'=>'fas fa-users',

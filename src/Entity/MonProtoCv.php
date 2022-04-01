@@ -10,6 +10,7 @@ class MonProtoCv{
     private $tel;
     private $avatar;
     private $profil;
+    private $sexe;
 
     /**
      * Get the value of nom
@@ -167,6 +168,26 @@ class MonProtoCv{
     public function setProfil($profil)
     {
         $this->profil = $profil;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of sexe
+     */ 
+    public function getSexe()
+    {
+        return $this->sexe;
+    }
+
+    /**
+     * Set the value of sexe
+     *
+     * @return  self
+     */ 
+    public function setSexe($sexe)
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

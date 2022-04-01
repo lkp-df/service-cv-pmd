@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\UserForCv;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,11 @@ class UserForCvType extends AbstractType
                 'avatar'
                 
             )
+            ->add('sexe',ChoiceType::class,[
+                'choices'=>[
+                'Homme'=>'homme',
+                'Femme'=>'femme']
+            ])
             ->add('poste_recherche_occupe');
     }
 

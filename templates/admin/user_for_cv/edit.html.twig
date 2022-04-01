@@ -8,8 +8,13 @@
 	<div class="row mb-5">
 		<div class="col bg-dark">
 			<h1>
-				CV appartenant à Mr ou Mme
+				CV de
 				<i>
+					{% if userforcv.sexe == 'homme' %}
+					Mr
+					{% else %}
+						Mme
+					{% endif %}
 					{{ userforcv.prenom }}
 					{{ userforcv.nom }}
 				</i>
@@ -17,7 +22,7 @@
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -33,6 +38,9 @@
 							</div>
 							<div class="form-group">
 								{{ form_row(form.prenom) }}
+							</div>
+							<div class="form-group">
+								{{ form_row(form.sexe) }}
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -58,7 +66,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -98,7 +108,7 @@
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -128,7 +138,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+	</div>
+	<div class="row mb-3">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -225,7 +237,7 @@
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -320,7 +332,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+	</div>
+	<div class="row mb-3">
+		<div class="col-md-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -419,7 +433,7 @@
 		</div>
 	</div>
 	<div class="row mb-3">
-		<div class="col-md-6">
+		<div class="col-lg-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>
@@ -508,7 +522,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
+	</div>
+	<div class="row mb-3">
+		<div class="col-lg-12">
 			<div class="card card-outline card-success">
 				<div class="card-header">
 					<h3>

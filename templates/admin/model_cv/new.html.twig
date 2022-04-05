@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %} {% import "macros/link.html.twig" as link%} {% import "macros/button.html.twig" as button%} {% block title %}New ModelCv{% endblock %} {% block body %}
+
+<div class="card mb-5">
+    <div class="card-header card-blue card-outline">
+        <h3>Création d'un nouveau modéle de Cv</h3>
+    </div>
+    <div class="card-body">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-lg-6 mt-lg-5">
+                {{ form_row(form.designation) }} {{ form_row(form.prix)}} {{ form_row(form.createur)}} {{ form_row(form.image)}}
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-lg-4 image" style="height: 500px;width: 100%;">
+                <div id="show_preview">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="btn-group">
+                    {{link.back(path('model_index'))}} {{button.add()}}
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        {{form_end(form)}}
+    </div>
+</div>
+{% endblock %} {% block javascripts %}
+<script>
+    $(document).ready(function() {
+        /*******lire une image avant insertion *********/
+        function previewFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#show_preview + img').remove();
+                    $('#show_preview').after('<img style="height: 100%;width: 400px"  src="' + e.target.result + '" />');
+                }
+                reader.readAsDataURL(input.files[0]);
+
+            }
+        }
+        /*******************END LECTURE IMAGE****************************/
+        $("#model_cv_image").change(function() {
+            previewFile(this);
+        })
+        $("#model_cv_image").on('click', function() {
+            $(".image").css('box-shadow', '1px 4px 8px #010E21')
+        })
+    })
+</script>{% endblock %}

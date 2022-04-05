@@ -52,6 +52,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
+    // public function getpersonneByNameFirstAndName(UserRepository $user){
+    //     $personnes = $user->findAll();
+    //     foreach ($personnes as $personne) {
+    //         $lastName = $personne->getPersonne()->getLastName();
+    //         $firstName = $personne->getPersonne()->getFirstName();
+    //         return $firstName.' '.$lastName;
+    //     }
+    // }
 
     /*
     public function findOneBySomeField($value): ?User

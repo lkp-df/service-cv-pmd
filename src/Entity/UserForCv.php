@@ -84,6 +84,11 @@ class UserForCv
      */
     private $curiclumVitae;
 
+    /**
+     * @ORM\Column(type="string", length=5)
+     */
+    private $sexe;
+
     public function __construct()
     {
         $this->logiciels = new ArrayCollection();
@@ -416,6 +421,18 @@ class UserForCv
                 $curiclumVitae->setUserForCv(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSexe(): ?string
+    {
+        return $this->sexe;
+    }
+
+    public function setSexe(string $sexe): self
+    {
+        $this->sexe = $sexe;
 
         return $this;
     }

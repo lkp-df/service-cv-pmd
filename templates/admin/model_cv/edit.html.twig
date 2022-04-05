@@ -1,0 +1,77 @@
+{% extends 'admin/base.html.twig' %} {% import "macros/link.html.twig" as link %} {% import "macros/button.html.twig" as button %} {% block title %}Edit Modele CV{% endblock %} {% block body %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h3>Edition du modèle {{model_cv.id}}</h3>
+            </div>
+            {{form_start(form)}}
+            <div class="card-body">
+                {{form_row(form.designation)}} {{form_row(form.prix)}} {{form_row(form.createur)}}
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="btn-group">
+                        {{link.back(path('model_index'))}} {{button.update()}}
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="card-footer"></div>
+            {{form_end(form)}}
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h3>Image du modèle {{model_cv.id}}</h3>
+            </div>
+            <div class="card-body">
+                <img src="{{ asset('img/modeles/' ~ model_cv.image) }}" alt="" style="height: 500px;width:auto"> {{form_start(formImage)}}
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{form_row(formImage.image)}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            {{link.back(path('model_index'))}} {{button.update()}}
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                {{form_end(formImage)}}
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block javascripts %}
+<script>
+    $(document).ready(function() {
+        /*******lire une image avant insertion *********/
+        function previewFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#show_preview + img').remove();
+                    $('#show_preview').after('<img style="height: 100%;width: 400px"  src="' + e.target.result + '" />');
+                }
+                reader.readAsDataURL(input.files[0]);
+
+            }
+        }
+        /*******************END LECTURE IMAGE****************************/
+        $("#model_cv_image").change(function() {
+            previewFile(this);
+        })
+        $("#model_cv_image").on('click', function() {
+            $(".image").css('box-shadow', '1px 4px 8px #010E21')
+        })
+    })
+</script> {% endblock %}

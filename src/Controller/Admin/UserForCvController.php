@@ -228,11 +228,11 @@ class UserForCvController extends AbstractController
                 && !empty($request->request->get("proto_cv")["prenom"])
                 && !empty($request->request->get("proto_cv")["poste"])
             ) {
-
+                //dd($request);
                 //inserons l'image du proprietaire du cv
                 //recuperons l'image du cv à partir de mon protoCv
                 $file = $cv->getAvatar();
-
+//dd($file);
                 //si le user n'a pas choisi d'image
                 if (isset($file)) {
                     //dd($file);
@@ -243,11 +243,15 @@ class UserForCvController extends AbstractController
                     //deplacons le fichier dans le dossier uploads qui est dans public avec le nouveau nom
                     $file->move($upload_dir, $filename);
                 } //si l'utilisateur n'inserer
+                else{
+                    $filename=null;
+                }
 
                 #definissons un new userForCv
                 $userForCv = new UserForCv();
                 $userForCv->setNom($request->request->get("proto_cv")["nom"])
                     ->setPrenom($request->request->get("proto_cv")["prenom"])
+                    ->setSexe($request->request->get("proto_cv")["sexe"])
                     ->setAvatar($filename)
                     ->setPosteRechercheOccupe($request->request->get("proto_cv")["poste"]);
 
@@ -456,10 +460,10 @@ class UserForCvController extends AbstractController
         $formContact = $this->createForm(ContactType::class, $contact);
         $formContact->handleRequest($request);
         if ($formContact->isSubmitted() && $formContact->isValid()) {
-            //dd($con);
+            //dd($request);
             $con->setAdresse($request->request->get("contact")["adresse"])
-                ->setTel($con->getTel($request->request->get("contact")["tel"]))
-                ->setEmail($con->getEmail($request->request->get("contact")["email"]))
+                ->setTel($request->request->get("contact")["tel"])
+                ->setEmail($request->request->get("contact")["email"])
                 ->setUserForCv($userForCv);
 
             $entityManager = $this->getDoctrine()->getManager();

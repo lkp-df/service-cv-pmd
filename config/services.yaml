@@ -7,6 +7,7 @@ parameters:
     user_images_directory: '%kernel.project_dir%/public/img/user'
     maitenance_file_path: '%kernel.project_dir%/public/.maintenance'
     cv_image_directory: '%kernel.project_dir%/public/img/cv_pictures'
+    modele_image_directory: '%kernel.project_dir%/public/img/modeles'
     app.locales: [fr, en]
     locale: fr
 services:

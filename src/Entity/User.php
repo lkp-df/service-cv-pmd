@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -52,6 +54,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToOne(targetEntity=Personne::class, cascade={"persist", "remove"})
      */
     private $personne;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ModelCv::class, mappedBy="createur")
+     */
+    private $modeleCv;
+
+    public function __construct()
+    {
+        $this->modeleCv = new ArrayCollection();
+    }
 
     
 
@@ -171,4 +183,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|ModelCv[]
+     */
+    public function getModeleCv(): Collection
+    {
+        return $this->modeleCv;
+    }
+
+    public function addModeleCv(ModelCv $modeleCv): self
+    {
+        if (!$this->modeleCv->contains($modeleCv)) {
+            $this->modeleCv[] = $modeleCv;
+            $modeleCv->setCreateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModeleCv(ModelCv $modeleCv): self
+    {
+        if ($this->modeleCv->removeElement($modeleCv)) {
+            // set the owning side to null (unless already changed)
+            if ($modeleCv->getCreateur() === $this) {
+                $modeleCv->setCreateur(null);
+            }
+        }
+
+        return $this;
+    }
+    
 }

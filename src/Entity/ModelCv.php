@@ -29,6 +29,7 @@ class ModelCv
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
      */
     private $image;
 
@@ -41,6 +42,12 @@ class ModelCv
      * @ORM\ManyToOne(targetEntity=Cv::class, inversedBy="modelCvs")
      */
     private $cv;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="modeleCv")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $createur;
 
     public function __construct()
     {
@@ -81,7 +88,7 @@ class ModelCv
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage(string $image):self
     {
         $this->image = $image;
 
@@ -108,6 +115,18 @@ class ModelCv
     public function setCv(?Cv $cv): self
     {
         $this->cv = $cv;
+
+        return $this;
+    }
+
+    public function getCreateur(): ?User
+    {
+        return $this->createur;
+    }
+
+    public function setCreateur(?User $createur): self
+    {
+        $this->createur = $createur;
 
         return $this;
     }

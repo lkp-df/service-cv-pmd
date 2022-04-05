@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ProtoCvType extends AbstractType
@@ -30,6 +31,7 @@ class ProtoCvType extends AbstractType
                 [
                     'label' => 'avatar jpg or png',
                     'multiple' => false,
+                    'mapped'=>true,
                     'required' => false,
                     'constraints' =>
                     [
@@ -39,6 +41,7 @@ class ProtoCvType extends AbstractType
                                 'mimeTypes' =>
                                 [
                                     'image/jpeg',
+                                    'image/jpg',
                                     'image/png'
                                 ],
                                 'mimeTypesMessage'=>'Veuillez choisir une image valide',
@@ -47,6 +50,11 @@ class ProtoCvType extends AbstractType
                     ]
                 ]
             )
+            ->add('sexe',ChoiceType::class,[
+                'choices'=>[
+                'Homme'=>'homme',
+                'Femme'=>'femme']
+            ])
         ;
     }
 

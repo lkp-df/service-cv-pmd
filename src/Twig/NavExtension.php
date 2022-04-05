@@ -29,15 +29,23 @@ class NavExtension extends AbstractExtension
                 'admin' =>
                 [
                     [
-                        'name' => 'cv',
+                        'name'=>'Modeles',
+                        'links'=>
+                        [
+                            ['name'=>'Listes','path'=>'model_index'],
+                            ['name'=>'New Model','path'=>'model_new']
+                        ]
+                    ],
+                    [
+                        'name' => 'Curicilium Vitae',
                         'links' =>
                         [
                             [
-                                'name' => 'Lists',
+                                'name' => 'Listes',
                                 'path' => 'cv_index'
                             ],
                             [
-                                'name' => 'New',
+                                'name' => 'New CV',
                                 'path' => 'cv_new'
                             ]
                         ]

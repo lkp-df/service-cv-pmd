@@ -48,7 +48,9 @@ class ModelCvType extends AbstractType
                  'mapped'=>true,
                  'expanded'=>false,
                  'multiple'=>false,
-                 'choice_label'=> 'email'
+                 'choice_label'=> function ($user){
+                     return $user->getPersonne()->getFirstName().' '.$user->getPersonne()->getLastName();
+                 }
              ])
         ;
     }

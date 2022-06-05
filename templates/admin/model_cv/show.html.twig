@@ -1,57 +1,79 @@
-{% extends 'admin/base.html.twig' %}{% import "macros/link.html.twig" as link%} {% import "macros/button.html.twig" as button %} {% block title %}ModelCv{% endblock %} {% block body %}
-<div class="row">
-    <div class="col-lg-6">
-        <div class="card card-outline card-gray">
-            <div class="card-header">
-                <h3>Modèle {{model_cv.id}}</h3>
-            </div>
-            <div class="card-body">
-                <div class="row mt-3">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5 text-bold">Date de Création</div>
-                    <div class="col-md-5">{{ model_cv.getCreatedAt ? model_cv.getCreatedAt|date('Y-m-d H:i:s') : '' }}</div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5 text-bold">Désignation</div>
-                    <div class="col-md-5">{{model_cv.designation}}</div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5 text-bold">prix De Vente</div>
-                    <div class="col-md-5">222</div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5 text-bold">Dévéloppé par</div>
-                    <div class="col-md-5">
-                        {{model_cv.createur.personne.firstName ~' '~ model_cv.createur.personne.lastName}}
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <div class="btn-group">
-                            {{link.back(path('model_index'))}} {{link.edit(path('model_edit', {'id': model_cv.id}))}}
-                        </div>
-                    </div>
-                    <div class="col-md-4"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6 dim">
-        <img src="{{ asset('img/modeles/' ~ model_cv.image) }}" alt="" style="height: 580px;width:auto">
-    </div>
-</div>
-<style>
-    .dim {
-        height: 400px;
-        width: 400px;
-    }
-</style>
+{% extends 'admin/base.html.twig' %}{% import "macros/link.html.twig" as link%}
+{% import "macros/button.html.twig" as button %}
+{% block title %}ModelCv
+{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            // alert('ok')
+            $('.img-popup-link').magnificPopup({
+                type: 'image',
+                mainClass: 'mfp-with-zoom',
+                zoom:{
+                    enabled: true, 
+                }
+            });
+        })
+    </script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-md-12 col-12">
+			<div class="card card-outline card-gray">
+				<div class="card-header">
+					<div class="card-title">Modèle
+						{{model_cv.id}}</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-5 text-bold">Date de Création</div>
+								<div class="col-md-5">{{ model_cv.getCreatedAt ? model_cv.getCreatedAt |date_format_fr : '' }}</div>
+								<div class="col-md-1"></div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-md-1"></div>
+								<div class="col-md-5 text-bold">Désignation</div>
+								<div class="col-md-5">{{model_cv.designation}}</div>
+								<div class="col-md-1"></div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-md-1"></div>
+								<div class="col-md-5 text-bold">prix De Vente</div>
+								<div class="col-md-5">{{model_cv.prix| number_format(0,'',' ')}}
+									{{ site.current_name}}</div>
+								<div class="col-md-1"></div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-md-1"></div>
+								<div class="col-md-5 text-bold">Dévéloppé par</div>
+								<div class="col-md-5">
+									{{model_cv.createur.personne.firstName ~' '~ model_cv.createur.personne.lastName}}
+								</div>
+								<div class="col-md-1"></div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-md-4">
+									<div class="btn-group"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+                            <a class="img-popup-link" href="{{ asset('img/modeles/' ~ model_cv.image) }}">
+							    <img src="{{ asset('img/modeles/' ~ model_cv.image) }}" alt="" style="height: 280px;width:auto">
+                            </a>
+						</div>
+					</div>
+					<hr>
+					{{link.back(path('model_index'))}}
+					{{link.edit(path('model_edit', {'id': model_cv.id}))}}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

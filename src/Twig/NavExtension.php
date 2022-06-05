@@ -29,7 +29,7 @@ class NavExtension extends AbstractExtension
                 'admin' =>
                 [
                     [
-                        'name'=>'Modeles',
+                        'name'=>'Modèles',
                         'links'=>
                         [
                             ['name'=>'Listes','path'=>'model_index'],
@@ -68,7 +68,7 @@ class NavExtension extends AbstractExtension
                 ],
                 'user' =>
                 [],
-                'dashboard' =>
+                'navs' =>
                 [
                     [
                         'name' => $this->translator->trans('Dashboard'),
@@ -85,7 +85,7 @@ class NavExtension extends AbstractExtension
                         'path' => 'profile_index',
                     ],
                     [
-                        'name' => 'App name',
+                        'name' => 'Serivce Cv',
                         'icon' => 'fa fa-home',
                         'links' =>
                         [

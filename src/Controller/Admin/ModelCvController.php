@@ -15,11 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function PHPUnit\Framework\fileExists;
+
 /**
  * @Route("/admin/model")
  */
 class ModelCvController extends AbstractController
 {
+    private $parent_name ='Modèles';
 
     /**
      * @Route("/", name="model_index", methods={"GET"})
@@ -28,6 +31,7 @@ class ModelCvController extends AbstractController
     {
         return $this->render('admin/model_cv/index.html.twig', [
             'model_cvs' => $modelCvRepository->findAll(),
+            'parent_page'=>$this->parent_name
         ]);
     }
 
@@ -117,7 +121,10 @@ class ModelCvController extends AbstractController
             $file->move($upload_dir, $filename);
 
              //on va supprimer cette ancienne image dans le dossier des images de CV
-             $r = unlink($upload_dir . "/" . $avatar);
+             $imagePath = $upload_dir .DIRECTORY_SEPARATOR.$avatar;
+            if(fileExists($imagePath)){
+                $r = unlink($imagePath);
+            }
 
              //on verifie si la suprresion est bien effectuée, on insert la nouvelle image
              if ($r) {

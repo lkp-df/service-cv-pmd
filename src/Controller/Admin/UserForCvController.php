@@ -59,6 +59,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserForCvController extends AbstractController
 {
+    private $parent_name = 'Curicilium Vitae';
    
     /**
      * @Route("/", name="cv_index", methods={"GET"})
@@ -67,6 +68,7 @@ class UserForCvController extends AbstractController
     {
         return $this->render('admin/user_for_cv/index.html.twig', [
             'user_for_cvs' => $userForCvRepository->findAll(),
+            'parent_page'=>$this->parent_name
         ]);
     }
 
@@ -428,7 +430,7 @@ class UserForCvController extends AbstractController
     public function show(UserForCv $userForCv): Response
     {
         return $this->render('admin/user_for_cv/show.html.twig', [
-            'user_for_cv' => $userForCv,
+            'user' => $userForCv,
         ]);
     }
 

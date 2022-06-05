@@ -21,11 +21,11 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
          $users = array(
-         array('first_name' => 'Malick','last_name' => 'Tounkara','email' => 'user@mail.com',
+         array('first_name' => 'Malick','last_name' => 'Tounkara','email' => 'admin@mail.com',
                  'roles' => ["ROLE_ADMIN"]),
          array('first_name' => 'Mamadou','last_name' => 'Dieme','email' => 'editor@mail.com',
                  'roles' => ["ROLE_EDITOR"]),
-         array('first_name' => 'Pepin','last_name' => 'Ngoulou','email' => 'admin@mail.com',
+         array('first_name' => 'Pepin','last_name' => 'Ngoulou','email' => 'user@mail.com',
                  'roles' => ["ROLE_USER"]),
          );
          foreach ($users as $value) {
@@ -39,6 +39,7 @@ class UserFixtures extends Fixture
              ->setRoles($value['roles'])
              ->setPersonne($personne);
              $this->em->persist($user);
+             $this->addReference('_user_'. $value['email'],$user);
          }
          $this->em->flush();
     }

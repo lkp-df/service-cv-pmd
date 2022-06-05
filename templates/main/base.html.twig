@@ -1,86 +1,305 @@
-{% import "macros/navs.html.twig" as nav %}
-{% import "macros/breadcrumb.html.twig" as breadcrumb %}
 <!doctype html>
 <html lang="en">
 
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-  <!-- font-awesome -->
-  <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
-  <title>{% block title %}{% endblock %} | {{ app_name }}</title>
-  {% block head %}{% endblock %}
-</head>
+		<!-- Bootstrap CSS -->
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+								        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous"> -->
+		<link rel="shortcut icon" href="{{ asset('img/logo/logo-pmd-1.png') }}" type="image/x-icon"> <link
+		rel="stylesheet" href="{{ asset('css/boostrap/bootstrap.min.css') }}">
+		<!-- owl.carousel -->
+		<link rel="stylesheet" href="{{ asset('css/owl-carousel/owl.carousel.min.css') }}">
+		<link
+		rel="stylesheet" href="{{ asset('css/owl-carousel/owl.theme.default.min.css') }}">
+		<!-- Font Awesome -->
+		<link
+		rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
+		<!-- aos -->
+		<link
+		href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+		<!-- Style -->
+		<link rel="stylesheet" href="{{ asset('css/pmd.css') }}">
 
-<body>
+		<!--link rel="stylesheet" href="swiper.min.css"-->
+		<!-- min . css-->
+		<link
+		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer"/> <!-- theme .css-->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+		<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+		<title>
+			{% block title %}{% endblock %}
+			|
+			{{ app_name }}</title>
+		{% block head %}{% endblock %}
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a id="dropdownSubMenu2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            class="nav-link dropdown-toggle"><img width="30px"
-              src="{{ asset('img/pays/' ~ app.request.locale ~ '') }}.jpg" alt="lang"> </a>
-          <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-            {% for item in locales %}
-            {% if item != app.request.locale %}
-            <li>
-              <a href="{{ path('lang',{ locale: item }) }}" class="dropdown-item">
-                <img width="30px" src="{{ asset('img/pays/' ~ item ~ '') }}.jpg" alt="" srcset="">
-                {{item}} </a>
-            </li>
-            {% endif %}
-            {% endfor %}
-          </ul>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    </div>
-  </nav>
-  {% block body %}{% endblock %}
-  {% block footer %}{% endblock %}
+		<style>
+			.swiper-slide{width:60%;height:90%
+			}
+			.swiper{width:100%;height:400px;background:red;display:flex;justify-content:center;align-items:center;font-size:60px
+			}
+		</style>
+	</head>
 
-  <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-    crossorigin="anonymous"></script>
-  {% block foot %}{% endblock %}
-  {% block javascripts %}{% endblock %}
-</body>
+	<body>
+		<button onclick="topFunction()" id="btn-scroll" class="bg-3" title="Go to top">
+			<i class="fa fa-arrow-circle-up fa-1x" aria-hidden="true"></i>
+		</button>
+		<div id="loader-pmd">
+			<div class="loader">
+				<img width="40%" src="{{ asset('/img/logo/pmd-developper.png') }}" class="d-block mx-auto" alt="">
+				chargement...
+			</div>
+		</div>
+
+		<header class="main-header pt-1">
+			<div class="container">
+				<nav class="navbar  navbar-expand-lg main-nav px-0">
+					<a
+						href="#">
+						<!-- PMD Developper -->
+						<img class="img-nav" src="{{ asset('img/logo/pmd-developper.png') }}" alt="">
+					</a>
+					<div class="collapse navbar-collapse" id="mainMenu">
+						<ul class="navbar-nav ml-auto text-uppercase f1">
+							<li>
+								<a href="/">Accueil</a>
+							</li>
+							<li>
+								<a href="{{ path('main_modele_index') }}" class="active">Modele</a>
+							</li>
+
+							<li>
+								<a href="{{ path('app_login') }}">Connexion</a>
+							</li>
+						</ul>
+					</div>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar icon-bar-1"></span>
+						<span class="icon-bar icon-bar-2"></span>
+						<span class="icon-bar icon-bar-3"></span>
+					</button>
+				</nav>
+			</div>
+			<!-- /.container -->
+		</header>
+
+		<main>
+			{% block main %}{% endblock %}
+		</main>
+		<footer class="footer-10">
+			<div class="container">
+				<div class="row mb-5 pb-3 no-gutters">
+					<div class="col-md-4 mb-md-0  d-flex">
+						<div data-aos="zoom-in" class="con con-1 bg-2 w-100 py-5">
+							<div class="con-info w-100 text-center">
+								<div class="icon d-flex align-items-center justify-content-center">
+									<i class="fa fa-phone" aria-hidden="true"></i>
+								</div>
+								<div class="text">
+									<span>+221 78 127 82 88
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mb-md-0 d-flex">
+						<div data-aos="zoom-in-up" class="con con-2 bg-3 w-100 py-5">
+							<div class="con-info w-100 text-center">
+								<div class="icon d-flex align-items-center   justify-content-center">
+									<i class="fa fa-envelope" aria-hidden="true"></i>
+								</div>
+								<div class="text">
+									<span>contact@pmd-developper.com</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mb-md-0 d-flex">
+						<div data-aos="zoom-in-down" class="con con-3 bg-2 w-100 py-5">
+							<div class="con-info w-100 text-center">
+								<div class="icon d-flex align-items-center justify-content-center">
+									<i class="fa fa-map-marker" aria-hidden="true"></i>
+								</div>
+								<div class="text">
+									<span>Dakar sacré couer 2, Sénégal</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mb-5">
+					<div class="col-md-8 mx-auto">
+						<div class="row">
+							<div class="col-md-6 mb-md-0 mb-4">
+								<h2 class="footer-heading">A propos</h2>
+								<ul class="list-unstyled">
+									<li>
+										<a href="about.html/#about" class="d-block">Out story</a>
+									</li>
+									<li>
+										<a target="_blank" href="public/doc/Conditions générales d'utilisation-1.pdf" class="d-block">Condition d'utilisation</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-md-6 mb-md-0 mb-4">
+								<h2 class="footer-heading">Lien utile</h2>
+								<ul class="list-unstyled">
+									<li>
+										<a href="#services" class="d-block">Our services</a>
+									</li>
+									<li>
+										<a href="contact.html" class="d-block">Contact</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="footer-site-info">© 2020 -
+								<span id="year"></span>
+							</div>
+						</div>
+						<div class="col-md-3 offset-md-6">
+							<div id="footer-socials">
+								<div class="socials inline-inside socials-colored">
+
+									<a href="https://www.facebook.com/malick.tounkara.50/" target="_blank" title="Facebook" class="socials-item">
+										<i class="fab fa-facebook-f facebook"></i>
+									</a>
+									<a href="https://api.whatsapp.com/send?phone=221781278288&text=Salut, Malick j'ai eu votre contacte sur votre site :" target="_blank" title="Whatsapp" class="socials-item">
+										<i class="fab fa-whatsapp whatsapp"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</footer>
+
+		<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+		<!--script src="swiper.min.js"></script-->
+
+		<script>
+
+
+			const swiper = new Swiper('.swiper', {
+// Optional parameters
+// direction: 'vertical',
+// loop: true,
+/*    effect: "cube",
+                grabCursor: true,
+                cubeEffect: {
+                    shadow: true,
+                    slideShadows: true,
+                    shadowOffset: 60,
+                    shadowScale: 0.5,
+                },
+    */
+effect: "coverflow",
+grabCursor: true,
+centeredSlides: true,
+slidesPerView: "auto",
+coverflowEffect: {
+rotate: 70,
+stretch: 0,
+depth: 40,
+modifier: 1,
+slideShadows: true
+},
+// If we need pagination
+pagination: {
+el: '.swiper-pagination'
+},
+
+// Navigation arrows
+navigation: {
+nextEl: '.swiper-button-next',
+prevEl: '.swiper-button-prev'
+},
+
+// And if we need scrollbar
+scrollbar: {
+el: '.swiper-scrollbar'
+}
+
+});
+/*    var swiper = new Swiper(".mySwiper", {
+                    effect: "coverflow",
+                    grabCursor: true,
+                    centeredSlides: true,
+                    slidesPerView: "auto",
+                    coverflowEffect: {
+                        rotate: 50,
+                        stretch: 0,
+                        depth: 300,
+                        modifier: 1,
+                        slideShadows: false,
+                        loop: true,
+                        margin: 10,
+                        nav: true,
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                    },
+                     // Navigation arrows
+                     navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                     // And if we need scrollbar
+                     scrollbar: {
+                        el: '.swiper-scrollbar',
+                    },
+        
+        
+                });*/
+
+// import required modules
+// import { Autoplay, Pagination, Navigation } from "swiper";
+		</script>
+
+
+		<script src="{{ asset('js/jquery/jquery-v3.6.js') }}"></script>
+
+
+		<script src="{{ asset('js/boostrap/bootstrap.min.js') }}"></script>
+		<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+		<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+								        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+								        crossorigin="anonymous"></script>
+								    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+								        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+								        crossorigin="anonymous"></script> -->
+
+
+		<!-- owl-carousel --><script src="{{ asset('js/owl-carousel/owl.carousel.min.js') }}"> </script>
+		<!-- Aos -->
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+		{% block foot %}{% endblock %}
+		<!-- pmd script  -->
+		<script src="{{ asset('js/util.js')}}"></script>
+		<script src="{{ asset('js/main.js')}}"></script>
+
+
+		<!--let's include cdn files-->
+		<!-- jquery-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+		<!-- carousel min .js-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		{% block javascripts %}{% endblock %}
+	</body>
 
 </html>

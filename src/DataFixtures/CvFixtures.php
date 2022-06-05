@@ -15,10 +15,11 @@ use App\Entity\Profil;
 use App\Entity\TacheEffectuer;
 use App\Entity\UserForCv;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class CvFixtures extends Fixture
+class CvFixtures extends Fixture implements DependentFixtureInterface
 {
     private $em;
     public function __construct(EntityManagerInterface $entityManagerInterface)
@@ -98,7 +99,7 @@ class CvFixtures extends Fixture
         foreach ($users as $value) {
             $user = new UserForCv();
 
-            $user->setNom($value["nom"])->setPrenom($value["prenom"])
+            $user->setNom($value["nom"])->setPrenom($value["prenom"])->setSexe('Homme')
                 ->setAvatar($value["avatar"])->setPosteRechercheOccupe($value["poste"]);
             $this->em->persist($user);
             $this->em->flush();
@@ -191,6 +192,7 @@ class CvFixtures extends Fixture
                 //creer le modele
                 if ($numCv->getId()) {
                     $model = new ModelCv();
+                    $model->setCreateur($this->getReference('_user_admin@mail.com'));
                     //je creer juste un seul modele par cv
                     $model->setDesignation("modele 1")->setImage("model1.png")
                         ->setPrix(1000)->setCv($numCv);
@@ -199,5 +201,11 @@ class CvFixtures extends Fixture
                 }
             }
         }
+    }
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class
+        ];
     }
 }

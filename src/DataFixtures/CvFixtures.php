@@ -13,6 +13,7 @@ use App\Entity\Logiciel;
 use App\Entity\ModelCv;
 use App\Entity\Profil;
 use App\Entity\TacheEffectuer;
+use App\Entity\User;
 use App\Entity\UserForCv;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,11 +28,11 @@ class CvFixtures extends Fixture
     }
     public function load(ObjectManager $manager)
     {
-        $users =
+        /* $userForCVTable =
             [
-                ["nom" => "Ngoulou", "prenom" => "Pepin", "avatar" => "lkp.png", "poste" => "developper Php"],
-                ["nom" => "Dieme", "prenom" => "Mamadou", "avatar" => "nans.png", "poste" => "developper Java"],
-                ["nom" => "Tounkara", "prenom" => "Malick", "avatar" => "tkr.png", "poste" => "developper Php"]
+                ["nom" => "Ngoulou", "prenom" => "Pepin", "avatar" => "lkp.png", "poste" => "developper Php", "sexe" => "masculin"],
+                ["nom" => "Dieme", "prenom" => "Mamadou", "avatar" => "nans.png", "poste" => "developper Java", "sexe" => "masculin"],
+                ["nom" => "Tounkara", "prenom" => "Malick", "avatar" => "tkr.png", "poste" => "developper Php", "sexe" => "masculin"]
             ];
         $ci = [
             ["description" => "football"],
@@ -91,14 +92,19 @@ class CvFixtures extends Fixture
         $profil = [
             "description" => "je suis passionné du développement informatique et des solutions High Tech",
         ];
-        //$cv = ["numCv" => 1]; //on mettra un compteur
+        //on mettra un compteur
+        $cv = [
+            ["numCv" => 1, "user_id" => 1],
+            ["numCv" => 2, "user_id" => 2],
+            ["numCv" => 3, "user_id" => 3],
+        ];
 
 
         //insertion des trois users
-        foreach ($users as $value) {
+        foreach ($userForCVTable as $value) {
             $user = new UserForCv();
 
-            $user->setNom($value["nom"])->setPrenom($value["prenom"])
+            $user->setNom($value["nom"])->setPrenom($value["prenom"])->setSexe($value["sexe"])
                 ->setAvatar($value["avatar"])->setPosteRechercheOccupe($value["poste"]);
             $this->em->persist($user);
             $this->em->flush();
@@ -183,7 +189,15 @@ class CvFixtures extends Fixture
                 $this->em->persist($prof);
                 $this->em->flush();
 
-                //j'insere le numero du cv
+                //pour les cv
+                foreach ($cv as  $value) {
+
+
+                    $monCv = new Cv();
+                    $monCv->setUserForCv($user)->setNumCv($value["numCv"])->setUser();
+                    $this->em->persist($numCv);
+                    $this->em->flush();
+                }
                 $numCv = new Cv();
                 $numCv->setUserForCv($user)->setNumCv($i);
                 $this->em->persist($numCv);
@@ -194,10 +208,10 @@ class CvFixtures extends Fixture
                     //je creer juste un seul modele par cv
                     $model->setDesignation("modele 1")->setImage("model1.png")
                         ->setPrix(1000)->setCv($numCv);
-                        $this->em->persist($model);
-                        $this->em->flush();
+                    $this->em->persist($model);
+                    $this->em->flush();
                 }
             }
-        }
+        } */
     }
 }

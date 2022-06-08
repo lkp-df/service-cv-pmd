@@ -10,16 +10,13 @@
             <div class="card-body">
                 {{form_row(form.designation)}} {{form_row(form.prix)}} {{form_row(form.createur)}}
             </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
+            <div class="row mb-3">
+                <div class="col-md-12 text-center col-12">
                     <div class="btn-group">
                         {{link.back(path('model_index'))}} {{button.update()}}
                     </div>
                 </div>
-                <div class="col-md-4"></div>
             </div>
-            <div class="card-footer"></div>
             {{form_end(form)}}
         </div>
     </div>
@@ -43,18 +40,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
+                    <div class="col-md-12 text-center col-">
                         <div class="btn-group">
                             {{ link.back(path('model_index'))}} {{button.update()}}
                         </div>
                     </div>
-                    <div class="col-md-4"></div>
                 </div>
                 {{form_end(formImage)}}
             </div>
-            <div class="card-footer">
-            </div>
+
         </div>
     </div>
 </div>
@@ -93,7 +87,7 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     $('#show_preview + img').remove();
-                    $('#show_preview').after('<div id="show_preview2"><img  style="height: auto;max-width: 400px"  src="' + e.target.result + '" /></div>');
+                    $('#show_preview').html('<div id="show_preview2"><img  style="height: auto;max-width: 400px"  src="' + e.target.result + '" /></div>');
                 }
                 reader.readAsDataURL(input.files[0]);
 
@@ -102,9 +96,8 @@
         /*******************END LECTURE IMAGE****************************/
         $("#model_cv_type3_image").change(function() {
             previewFile(this);
-        })
-        $("#model_cv_type3_image").change(function() {
             $("#hold_img").hide(500);
+
         })
 
     })

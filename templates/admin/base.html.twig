@@ -227,7 +227,11 @@
 
             {# {{ nav.section('Dashboard',{icon: 'fas fa-tachometer-alt',pages:navs.getNavs.dashboard})}} #}
 
-            {{ nav.list(navs.getNavs.dashboard,'',parent_page|default('')) }}
+            {% if is_granted("ROLE_USER") %}
+                      {{ nav.list(navs.getNavs.dashboard_user,'',parent_page|default('')) }}
+            {% elseif is_granted("ROLE_ADMIN") %}
+              {{ nav.list(navs.getNavs.dashboard,'',parent_page|default('')) }}
+            {% endif %}
             {{ nav.list(navs.getNavs.user,'User',parent_page|default('')) }}
 
             {% if is_granted('ROLE_ADMIN') %}

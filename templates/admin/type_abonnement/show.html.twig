@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+{% import "macros/link.html.twig" as link %}
+{% import "macros/button.html.twig" as btn %}
+{% block title %}Type Abonnement
+{% endblock %}
+{% block body %}
+
+	<div class="card card-outline card-dark">
+		<div class="card-header">
+			<h3>Type Abonnement</h3>
+		</div>
+		<div class="card-body">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th>Id</th>
+						<td>{{ type_abonnement.id }}</td>
+					</tr>
+					<tr>
+						<th>Designation</th>
+						<td>{{ type_abonnement.designation }}</td>
+					</tr>
+					<tr>
+						<th>Montant</th>
+						<td>{{ type_abonnement.montant }}</td>
+					</tr>
+					<tr>
+						<th>NombreCv</th>
+						<td>{{ type_abonnement.nombreCv }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="card-footer">
+			<div class="btn-group">
+				{{link.back(path('admin_type_abonnement_index'),'Back to List')}}
+				{{link.edit(path('admin_type_abonnement_edit',{'id': type_abonnement.id}))}}
+			</div>
+		</div>
+	</div>
+{% endblock %}

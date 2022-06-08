@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("admin/profile")
- */
+
 class ProfileController extends AbstractController
 {
     private $translator;
@@ -21,7 +19,8 @@ class ProfileController extends AbstractController
         $this->translator = $translator;
     }
     /**
-     * @Route("/", name="profile_index", methods={"GET"})
+     * @Route("admin/profile/", name="profile_index", methods={"GET"})
+     * @Route("client/profile/", name="client_profile_index", methods={"GET"})
      */
     public function index(Request $request): Response
     {
@@ -35,7 +34,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="profile_new", methods={"GET","POST"})
+     * @Route("admin/profile/new", name="profile_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -58,7 +57,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="profile_show", methods={"GET"})
+     * @Route("admin/profile/{id}", name="profile_show", methods={"GET"})
      */
     public function show(User $user): Response
     {
@@ -68,7 +67,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="profile_edit", methods={"GET","POST"})
+     * @Route("admin/profile/{id}/edit", name="profile_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {        
@@ -103,7 +102,7 @@ class ProfileController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="profile_delete", methods={"POST"})
+     * @Route("admin/profile/{id}", name="profile_delete", methods={"POST"})
      */
     public function delete(Request $request, User $user): Response
     {

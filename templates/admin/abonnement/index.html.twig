@@ -1,0 +1,72 @@
+{% extends 'admin/base.html.twig' %}
+{% import "macros/link.html.twig" as link %}
+{% import "macros/button.html.twig" as btn %}
+{% import "macros/dataTable.html.twig" as dataTable %}
+{% block head %}
+	{{ dataTable.head() }}
+{% endblock %}
+{% block foot
+%}
+	{{ dataTable.js() }}
+{% endblock %}
+{% block javascripts %}
+	{{ dataTable.script('#table-1') }}
+{% endblock %}
+{% block title %}Abonnement
+{% endblock %}
+{% block body %}
+	<div class="card card-outline card-primary">
+		<div class="card-header">
+			<h3>Les Abonnements</h3>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<h3>
+						{{link.add(path('admin_abonnement_new'),'Create New')}}
+					</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<table id="#table-1" class="table">
+						<thead>
+							<tr>
+								<th>Type Abonnement</th>
+								<th>Debut</th>
+								<th>Fin</th>
+								<th>Statut</th>
+								<th>actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for abonnement in abonnements %}
+								<tr>
+
+									<td>{{ abonnement.typeAbonnement }}</td>
+									<td>{{ abonnement.debut ? abonnement.debut|date('Y-m-d H:i:s') : '' }}</td>
+									<td>{{ abonnement.fin ? abonnement.fin|date('Y-m-d H:i:s') : '' }}</td>
+									<td>{{ abonnement.statut }}</td>
+									<td>
+										{{link.show(path('admin_abonnement_show', {'id': abonnement.id}))}}
+										{{link.edit(path('admin_abonnement_edit', {'id': abonnement.id}))}}
+
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="5">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer">
+			{{ link.back(path('admin'),'back to dashoard') }}
+        </div>
+	</div>
+
+
+{% endblock %}

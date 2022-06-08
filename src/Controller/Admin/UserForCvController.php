@@ -54,14 +54,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/admin/cv")
- */
+
 class UserForCvController extends AbstractController
 {
    
     /**
-     * @Route("/", name="cv_index", methods={"GET"})
+     * @Route("/admin/cv/", name="cv_index", methods={"GET"})
      */
     public function index(UserForCvRepository $userForCvRepository): Response
     {
@@ -71,7 +69,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="cv_new", methods={"GET","POST"})
+     * @Route("/admin/cv/new", name="cv_new", methods={"GET","POST"})
      */
     public function new(Request $request, UserForCvRepository $repo, ExperienceProfessionnelleRepository $ex): Response
     {
@@ -423,7 +421,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="cv_show", methods={"GET"})
+     * @Route("/admin/cv/{id}", name="cv_show", methods={"GET"})
      */
     public function show(UserForCv $userForCv): Response
     {
@@ -433,7 +431,8 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="cv_edit", methods={"GET","POST"})
+     * @Route("/admin/cv/{id}/edit", name="cv_edit", methods={"GET","POST"})
+     * @Route("/client/cv/{id}/edit", name="cv_edit_client", methods={"GET","POST"})
      */
     public function edit(
         Request $request,
@@ -793,7 +792,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="cv_delete", methods={"POST"})
+     * @Route("/admin/cv/{id}", name="cv_delete", methods={"POST"})
      */
     public function delete(Request $request, UserForCv $userForCv): Response
     {
@@ -806,7 +805,7 @@ class UserForCvController extends AbstractController
         return $this->redirectToRoute('cv_index', [], Response::HTTP_SEE_OTHER);
     }
     /**
-     * @Route("/{id}/lg/{id_lg}/edit", name="cv_edit_lg",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/lg/{id_lg}/edit", name="cv_edit_lg",methods={"POST","GET"})
      */
     public function edit_langue(Request $request, UserForCv $userForCv, $id_lg, LangueRepository $l)
     {
@@ -835,7 +834,7 @@ class UserForCvController extends AbstractController
         );
     }
     /**
-     * @Route("/{id}/del_lg",name="del_lg",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_lg",name="del_lg",methods={"POST","GET"})
      */
     public function delete_langue(Request $request, UserForCv $userForCv, LangueRepository $l)
     {
@@ -854,7 +853,7 @@ class UserForCvController extends AbstractController
         // "pourcentage"=>$l->find($id_lg)->getNiveauPourcent()],200);
     }
     /**
-     * @Route("/{id}/log/{id_log}/edit", name="cv_edit_log",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/log/{id_log}/edit", name="cv_edit_log",methods={"POST","GET"})
      */
     public function edit_logiciel(Request $request, UserForCv $userForCv, $id_log, LogicielRepository $l)
     {
@@ -883,7 +882,7 @@ class UserForCvController extends AbstractController
         );
     }
     /**
-     * @Route("/{id}/del_log",name="del_log",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_log",name="del_log",methods={"POST","GET"})
      */
     public function delete_logiciel(Request $request, UserForCv $userForCv, LogicielRepository $l, EntityManagerInterface $em)
     {
@@ -899,7 +898,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/comp/{id_comp}/edit",name="cv_edit_comp",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/comp/{id_comp}/edit",name="cv_edit_comp",methods={"POST","GET"})
      */
     public function edit_competence(
         Request $request,
@@ -933,7 +932,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/del_comp",name="del_comp",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_comp",name="del_comp",methods={"POST","GET"})
      */
     public function delete_competence(
         Request $request,
@@ -952,7 +951,7 @@ class UserForCvController extends AbstractController
         return new JsonResponse($response, 200);
     }
     /**
-     * @Route("/{id}/ci/{id_ci}/edit",name="cv_edit_ci",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/ci/{id_ci}/edit",name="cv_edit_ci",methods={"POST","GET"})
      */
     public function edit_centre_interet(
         Request $request,
@@ -984,7 +983,7 @@ class UserForCvController extends AbstractController
         );
     }
     /**
-     * @Route("/{id}/del_ci",name="del_ci",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_ci",name="del_ci",methods={"POST","GET"})
      */
     public function delete_centre_interet(
         Request $request,
@@ -1002,7 +1001,7 @@ class UserForCvController extends AbstractController
         return new JsonResponse($response, 200);
     }
     /**
-     * @Route("/{id}/for/{id_forma}/edit",name="cv_edit_forma",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/for/{id_forma}/edit",name="cv_edit_forma",methods={"POST","GET"})
      */
     public function edit_formation(
         Request $request,
@@ -1043,7 +1042,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/del_for",name="del_forma",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_for",name="del_forma",methods={"POST","GET"})
      */
     public function delete_formation(
         Request $request,
@@ -1062,7 +1061,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/exp/{id_exp}/edit",name="cv_edit_exp",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/exp/{id_exp}/edit",name="cv_edit_exp",methods={"POST","GET"})
      */
     public function edit_experience_pro(
         Request $request,
@@ -1137,7 +1136,7 @@ class UserForCvController extends AbstractController
         );
     }
     /**  
-     * @Route("/{id}/del_exp",name="del_exp",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_exp",name="del_exp",methods={"POST","GET"})
      */
     public function delete_experience_pro(
         Request $request,
@@ -1165,7 +1164,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience",methods={"POST","GET"})
      */
     public function edit_tache_experience(
         Request $request,
@@ -1206,7 +1205,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/del_tac",name="del_tache_experience",methods={"POST","GET"})
+     * @Route("/admin/cv/{id}/del_tac",name="del_tache_experience",methods={"POST","GET"})
      */
     public function delete_tache_experience_pro(
         Request $request,

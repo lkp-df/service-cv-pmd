@@ -29,11 +29,11 @@ class NavExtension extends AbstractExtension
                 'admin' =>
                 [
                     [
-                        'name'=>'Modeles',
-                        'links'=>
+                        'name' => 'Modeles',
+                        'links' =>
                         [
-                            ['name'=>'Listes','path'=>'model_index'],
-                            ['name'=>'New Model','path'=>'model_new']
+                            ['name' => 'Listes', 'path' => 'model_index'],
+                            ['name' => 'New Model', 'path' => 'model_new']
                         ]
                     ],
                     [
@@ -64,10 +64,38 @@ class NavExtension extends AbstractExtension
                                 'path' => 'user_new',
                             ],
                         ]
+                    ],
+                    [
+                        'name' => 'Type Abonnements',
+                        'links' =>
+                        [
+                            ['name' => 'Les Types', 'path' => 'admin_type_abonnement_index'],
+                            ['name' => 'New Types', 'path' => 'admin_type_abonnement_new']
+                        ]
+                    ],
+                    [
+                        'name'=>'Abonnements',
+                        'links'=>
+                        [
+                            ['name'=>'Les Abonnements','path'=>'admin_abonnement_index'],
+                            ['name'=>'New Abonnement','path'=>'admin_abonnement_new']
+                        ]
                     ]
                 ],
                 'user' =>
-                [],
+                [
+                    [
+                        'name' => 'Mes CV',
+                        'icon' => '',
+                        'links' => [
+                            [
+                                'name' => 'Liste CV',
+                                'path' => 'client_model_index'
+                            ]
+                        ]
+                    ],
+
+                ],
                 'dashboard' =>
                 [
                     [
@@ -83,6 +111,33 @@ class NavExtension extends AbstractExtension
                     [
                         'name' => 'Profil',
                         'path' => 'profile_index',
+                    ],
+                    [
+                        'name' => 'App name',
+                        'icon' => 'fa fa-home',
+                        'links' =>
+                        [
+                            [
+                                'name' => $this->translator->trans('Home'),
+                                'path' => 'home'
+                            ]
+                        ]
+                    ],
+                ], 'dashboard_user' =>
+                [
+                    [
+                        'name' => $this->translator->trans('Dashboard'),
+                        'icon' => 'fas fa-tachometer-alt',
+                        'links' => [
+                            [
+                                'name' => $this->translator->trans('Dashboard') . ' 1',
+                                'path' => 'client_index'
+                            ]
+                        ]
+                    ],
+                    [
+                        'name' => 'Profil',
+                        'path' => 'client_profile_index',
                     ],
                     [
                         'name' => 'App name',

@@ -57,7 +57,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserForCvController extends AbstractController
 {
-   
+
     /**
      * @Route("/admin/cv/", name="cv_index", methods={"GET"})
      */
@@ -230,7 +230,7 @@ class UserForCvController extends AbstractController
                 //inserons l'image du proprietaire du cv
                 //recuperons l'image du cv à partir de mon protoCv
                 $file = $cv->getAvatar();
-//dd($file);
+                //dd($file);
                 //si le user n'a pas choisi d'image
                 if (isset($file)) {
                     //dd($file);
@@ -241,8 +241,8 @@ class UserForCvController extends AbstractController
                     //deplacons le fichier dans le dossier uploads qui est dans public avec le nouveau nom
                     $file->move($upload_dir, $filename);
                 } //si l'utilisateur n'inserer
-                else{
-                    $filename=null;
+                else {
+                    $filename = null;
                 }
 
                 #definissons un new userForCv
@@ -446,8 +446,11 @@ class UserForCvController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            if ($request->get("_route") == "cv_edit") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
 
         //$contacts = $c->findBy(['userForCv'=>$userForCv->getId()]);
@@ -458,6 +461,7 @@ class UserForCvController extends AbstractController
             ->setEmail($con->getEmail());
         $formContact = $this->createForm(ContactType::class, $contact);
         $formContact->handleRequest($request);
+
         if ($formContact->isSubmitted() && $formContact->isValid()) {
             //dd($request);
             $con->setAdresse($request->request->get("contact")["adresse"])
@@ -468,7 +472,11 @@ class UserForCvController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($con);
             $entityManager->flush();
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            if ($request->get("_route") == "cv_edit") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         #modification du profil cv de l'utilisateur courant
         $pro = $p->findByProfilUser($userForCv->getId());
@@ -486,7 +494,11 @@ class UserForCvController extends AbstractController
             $entityManager->persist($pro);
             $entityManager->flush();
 
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            if ($request->get("_route") == "cv_edit") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
 
         #ajouter une nouvelle langue sur la page de modification
@@ -535,7 +547,12 @@ class UserForCvController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($langue);
                     $entityManager->flush();
-                    return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+
+                    if ($request->get("_route") == "cv_edit") {
+                        return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    } else if ($request->get("_route") == "cv_edit_client") {
+                        return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    }
                 }
             }
         }
@@ -584,7 +601,11 @@ class UserForCvController extends AbstractController
                 }
             }
             #je dois ajouter les message flash
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            if ($request->get("_route") == "cv_edit") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
 
         #ajouter une competence
@@ -626,6 +647,11 @@ class UserForCvController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($competence);
                     $entityManager->flush();
+                    if ($request->get("_route") == "cv_edit") {
+                        return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    } else if ($request->get("_route") == "cv_edit_client") {
+                        return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    }
                 }
             }
             #add message flash
@@ -658,6 +684,12 @@ class UserForCvController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($centre_interet);
                     $entityManager->flush();
+                    //dd($request->get("_route"));
+                    if ($request->get("_route") == "cv_edit") {
+                        return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    } else if ($request->get("_route") == "cv_edit_client") {
+                        return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    }
                 }
             }
             #add message flash
@@ -705,6 +737,12 @@ class UserForCvController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($formation);
                     $entityManager->flush();
+                    //dd($request->get("_route"));
+                    if ($request->get("_route") == "cv_edit") {
+                        return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    } else if ($request->get("_route") == "cv_edit_client") {
+                        return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                    }
                 }
             }
         }
@@ -760,8 +798,9 @@ class UserForCvController extends AbstractController
                         // $t_tache = preg_replace('/\s\s+/',' ',$request->request->get("experience_pro_tache")[$i]);
                         $t_tache = explode(';', $t_tache);
                         foreach ($t_tache as  $value) {
+                            // dd($t_tache);
                             #eviter d'inserer le dernier espace du au point virgule
-                            if (!empty($value) && $value != ";") {
+                            if (!empty($value)) {
                                 $tache = new TacheEffectuer();
                                 $tache->setDescription($value)
                                     ->setExperienceProfessionnelle($ex->find($experience_pro->getId()));
@@ -769,6 +808,12 @@ class UserForCvController extends AbstractController
                                 $entityManager->persist($tache);
                                 $entityManager->flush();
                             }
+                        }
+                        //dd($request->get("_route"));
+                        if ($request->get("_route") == "cv_edit") {
+                            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+                        } else if ($request->get("_route") == "cv_edit_client") {
+                            return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
                         }
                         //dump($request->request->get("experience_pro_entreprise"));
 
@@ -806,6 +851,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/lg/{id_lg}/edit", name="cv_edit_lg",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/lg/{id_lg}/edit", name="cv_edit_client_lg",methods={"POST","GET"})
      */
     public function edit_langue(Request $request, UserForCv $userForCv, $id_lg, LangueRepository $l)
     {
@@ -822,7 +868,13 @@ class UserForCvController extends AbstractController
             $entityManager->persist($langue);
             $entityManager->flush();
 
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            //verification des urls si c'est admin ou client afin de savoir comment rediriger
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_lg") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_client_lg") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             "admin/user_for_cv/langue_edit.html.twig",
@@ -835,6 +887,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/del_lg",name="del_lg",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_lg",name="del_lg_client",methods={"POST","GET"})
      */
     public function delete_langue(Request $request, UserForCv $userForCv, LangueRepository $l)
     {
@@ -854,6 +907,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/log/{id_log}/edit", name="cv_edit_log",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/log/{id_log}/edit", name="cv_edit_log_client",methods={"POST","GET"})
      */
     public function edit_logiciel(Request $request, UserForCv $userForCv, $id_log, LogicielRepository $l)
     {
@@ -869,8 +923,12 @@ class UserForCvController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($logiciel);
             $entityManager->flush();
-
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_log") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_log_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             "admin/user_for_cv/logiciel_edit.html.twig",
@@ -883,6 +941,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/del_log",name="del_log",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_log",name="del_log_client",methods={"POST","GET"})
      */
     public function delete_logiciel(Request $request, UserForCv $userForCv, LogicielRepository $l, EntityManagerInterface $em)
     {
@@ -899,6 +958,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/comp/{id_comp}/edit",name="cv_edit_comp",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/comp/{id_comp}/edit",name="cv_edit_comp_client",methods={"POST","GET"})
      */
     public function edit_competence(
         Request $request,
@@ -918,8 +978,12 @@ class UserForCvController extends AbstractController
                 ->setUserForCv($userForCv);
             $em->persist($competence);
             $em->flush();
-
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            // dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_comp") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_comp_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             'admin/user_for_cv/competence_edit.html.twig',
@@ -933,6 +997,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/del_comp",name="del_comp",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_comp",name="del_comp_client",methods={"POST","GET"})
      */
     public function delete_competence(
         Request $request,
@@ -944,7 +1009,7 @@ class UserForCvController extends AbstractController
         if ($c->find($id_comp)) {
             $em->remove($c->find($id_comp));
             $em->flush();
-            $response = "ok";
+            $response = 'ok';
         } else {
             $response = 'non';
         }
@@ -952,6 +1017,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/ci/{id_ci}/edit",name="cv_edit_ci",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/ci/{id_ci}/edit",name="cv_edit_ci_client",methods={"POST","GET"})
      */
     public function edit_centre_interet(
         Request $request,
@@ -971,7 +1037,12 @@ class UserForCvController extends AbstractController
             $em->persist($centre_interet);
             $em->flush();
 
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_comp") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_ci_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             "admin/user_for_cv/centre_interet_edit.html.twig",
@@ -984,6 +1055,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/del_ci",name="del_ci",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_ci",name="del_ci_client",methods={"POST","GET"})
      */
     public function delete_centre_interet(
         Request $request,
@@ -1002,6 +1074,7 @@ class UserForCvController extends AbstractController
     }
     /**
      * @Route("/admin/cv/{id}/for/{id_forma}/edit",name="cv_edit_forma",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/for/{id_forma}/edit",name="cv_edit_forma_client",methods={"POST","GET"})
      */
     public function edit_formation(
         Request $request,
@@ -1028,8 +1101,12 @@ class UserForCvController extends AbstractController
                 ->setUserForCv($userForCv);
             $em->persist($formation);
             $em->flush();
-
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_forma") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_forma_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             "admin/user_for_cv/formation_edit.html.twig",
@@ -1043,6 +1120,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/del_for",name="del_forma",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_for",name="del_forma_client",methods={"POST","GET"})
      */
     public function delete_formation(
         Request $request,
@@ -1062,6 +1140,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/exp/{id_exp}/edit",name="cv_edit_exp",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/exp/{id_exp}/edit",name="cv_edit_exp_client",methods={"POST","GET"})
      */
     public function edit_experience_pro(
         Request $request,
@@ -1085,8 +1164,12 @@ class UserForCvController extends AbstractController
                 ->setUserForCv($userForCv);
             $em->persist($experience_pro);
             $em->flush();
-
-            return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_exp") {
+                return $this->redirectToRoute('cv_edit', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_exp_client") {
+                return $this->redirectToRoute('cv_edit_client', ['id' => $userForCv->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         #pour la tache de façon independante
         #si le bouton add tache est clique
@@ -1120,10 +1203,19 @@ class UserForCvController extends AbstractController
                 }
             }
             #add message flash
-            return $this->redirectToRoute('cv_edit_exp', [
-                'id' => $userForCv->getId(),
-                'id_exp' => $exp->find($id_exp)->getId()
-            ], Response::HTTP_SEE_OTHER);
+           // dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_exp") {
+                return $this->redirectToRoute('cv_edit_exp', [
+                    'id' => $userForCv->getId(),
+                    'id_exp' => $exp->find($id_exp)->getId()
+                ], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_exp_client") {
+                return $this->redirectToRoute('cv_edit_exp_client', [
+                    'id' => $userForCv->getId(),
+                    'id_exp' => $exp->find($id_exp)->getId()
+                ], Response::HTTP_SEE_OTHER);
+            }
+
         }
         return $this->renderForm(
             "admin/user_for_cv/experience_pro_edit.html.twig",
@@ -1137,6 +1229,7 @@ class UserForCvController extends AbstractController
     }
     /**  
      * @Route("/admin/cv/{id}/del_exp",name="del_exp",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_exp",name="del_exp_client",methods={"POST","GET"})
      */
     public function delete_experience_pro(
         Request $request,
@@ -1165,6 +1258,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/exp/{id_exp}/tac/{id_tache}/edit",name="cv_edit_tache_experience_client",methods={"POST","GET"})
      */
     public function edit_tache_experience(
         Request $request,
@@ -1190,8 +1284,12 @@ class UserForCvController extends AbstractController
             $em->flush();
 
             #message flash
-
-            return $this->redirectToRoute('cv_edit_exp', ['id' => $userForCv->getId(), 'id_exp' => $exp->find($id_exp)->getId()], Response::HTTP_SEE_OTHER);
+            //dd($request->get("_route"));
+            if ($request->get("_route") == "cv_edit_tache_experience") {
+                return $this->redirectToRoute('cv_edit_exp', ['id' => $userForCv->getId(), 'id_exp' => $exp->find($id_exp)->getId()], Response::HTTP_SEE_OTHER);
+            } else if ($request->get("_route") == "cv_edit_tache_experience_client") {
+                return $this->redirectToRoute('cv_edit_exp_client', ['id' => $userForCv->getId(), 'id_exp' => $exp->find($id_exp)->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
         return $this->renderForm(
             'admin/user_for_cv/tache_experience_edit.html.twig',
@@ -1206,6 +1304,7 @@ class UserForCvController extends AbstractController
 
     /**
      * @Route("/admin/cv/{id}/del_tac",name="del_tache_experience",methods={"POST","GET"})
+     * @Route("/client/cv/{id}/del_tac",name="del_tache_experience_client",methods={"POST","GET"})
      */
     public function delete_tache_experience_pro(
         Request $request,

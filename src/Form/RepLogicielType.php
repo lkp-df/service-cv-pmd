@@ -18,7 +18,8 @@ class RepLogicielType extends AbstractType
                 [
                     'choices' =>
                     [
-                        "oui" => "oui", "non" => "non"
+                        "oui" => "oui",
+                         "non" => "non"
                     ],
                     'placeholder' => 'choisir une option',
                     'multiple' => false,

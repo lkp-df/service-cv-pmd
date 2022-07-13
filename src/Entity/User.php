@@ -60,9 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $modeleCv;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Cv::class, mappedBy="user")
+     */
+    private $mesCv;
+
     public function __construct()
     {
         $this->modeleCv = new ArrayCollection();
+        $this->mesCv = new ArrayCollection();
     }
 
     
@@ -208,6 +214,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($modeleCv->getCreateur() === $this) {
                 $modeleCv->setCreateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cv[]
+     */
+    public function getMesCv(): Collection
+    {
+        return $this->mesCv;
+    }
+
+    public function addMesCv(Cv $mesCv): self
+    {
+        if (!$this->mesCv->contains($mesCv)) {
+            $this->mesCv[] = $mesCv;
+            $mesCv->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMesCv(Cv $mesCv): self
+    {
+        if ($this->mesCv->removeElement($mesCv)) {
+            // set the owning side to null (unless already changed)
+            if ($mesCv->getUser() === $this) {
+                $mesCv->setUser(null);
             }
         }
 

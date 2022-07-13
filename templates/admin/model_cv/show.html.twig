@@ -2,6 +2,7 @@
 {% import "macros/button.html.twig" as button %}
 {% block title %}ModelCv
 {% endblock %}
+<<<<<<< HEAD
 {% block head %}
 {% endblock %}
 
@@ -76,4 +77,64 @@
 			</div>
 		</div>
 	</div>
+=======
+{% block body %}
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="card card-outline card-gray">
+				<div class="card-header">
+					<h3>Modèle
+						{{model_cv.id}}</h3>
+				</div>
+				<div class="card-body">
+					<div class="row mt-3">
+						<div class="col-md-1"></div>
+						<div class="col-md-5 text-bold">Date de Création</div>
+						<div class="col-md-5">{{ model_cv.getCreatedAt ? model_cv.getCreatedAt|date_format_fr : '' }}</div>
+						<div class="col-md-1"></div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-md-1"></div>
+						<div class="col-md-5 text-bold">Désignation</div>
+						<div class="col-md-5">{{model_cv.designation}}</div>
+						<div class="col-md-1"></div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-md-1"></div>
+						<div class="col-md-5 text-bold">prix De Vente</div>
+						<div class="col-md-5">222</div>
+						<div class="col-md-1"></div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-md-1"></div>
+						<div class="col-md-5 text-bold">Dévéloppé par</div>
+						<div class="col-md-5">
+							{{model_cv.createur.personne.firstName ~' '~ model_cv.createur.personne.lastName}}
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="btn-group">
+								{{link.back(path('model_index'))}}
+								{{link.edit(path('model_edit', {'id': model_cv.id}))}}
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 dim">
+			<img src="{{ asset('img/modeles/' ~ model_cv.image) }}" alt="" style="height: 580px;width:auto">
+		</div>
+	</div>
+	<style>
+		.dim {
+			height: 400px;
+			width: 400px;
+		}
+	</style>
+>>>>>>> main
 {% endblock %}

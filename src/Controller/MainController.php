@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController{
+    
     /**
      * @Route("/change-lang/{locale}", name="lang")
      */

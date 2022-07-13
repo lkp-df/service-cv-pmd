@@ -40,6 +40,12 @@ class Cv
      */
     private $modelCvs;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="mesCv")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -113,6 +119,18 @@ class Cv
                 $modelCv->setCv(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

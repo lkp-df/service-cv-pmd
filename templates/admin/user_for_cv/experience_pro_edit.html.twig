@@ -3,8 +3,6 @@
 {% import "macros/link.html.twig" as link %}
 {% block title %}
     Edit Experience Professionnelle 
-        
-    
 {% endblock %}
 {% block body %}
     <div class="row">
@@ -27,7 +25,11 @@
                         {{ form_row(form.anneeOccupation) }}
                     </div>
                     <div class="btn-group" role="group">
+                        {% if is_granted('ROLE_ADMIN') %}
                         {{ link.back(path('cv_edit',{'id':userForcv.id})) }}
+                        {% elseif is_granted('ROLE_USER') %}
+                        {{ link.back(path('cv_edit_client',{'id':userForcv.id})) }}
+                        {% endif %}
                         {{ btn.update() }}
                     </div>
                 </div>
@@ -59,8 +61,14 @@
                                         {{ tache.description }}
                                     </td>
                                     <td>
+                                        {% if is_granted('ROLE_ADMIN') %}
                                         {{ link.edit(path('cv_edit_tache_experience',{'id':userForcv.id,'id_exp':experience.id,'id_tache':tache.id})) }}
-                                        <button class="btn btn-sm btn-danger del_tache" data-delete="{{ tache.id }}">
+                                        {% elseif is_granted('ROLE_USER') %}
+                                        {{ link.edit(path('cv_edit_tache_experience_client',{'id':userForcv.id,'id_exp':experience.id,'id_tache':tache.id})) }}
+                                        {% endif %}
+                                        <button class="btn btn-sm btn-danger del_tache" data-delete="{{ tache.id }}"
+                                        data-path="{{is_granted('ROLE_ADMIN') ? path("del_tache_experience",{"id":userForcv.id}) : path("del_tache_experience_client",{"id":userForcv.id}) }}"
+                                        >
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -102,7 +110,9 @@
                                         <div class="col-md-4"></div>
                                         <div class="col-md-4">
                                             <div class="btn-group">
-                                                <a href="#" class="btn btn-success add_tache">
+                                                <a href="#" class="btn btn-success add_tache"
+                                                data-path="{{is_granted('ROLE_ADMIN') ? path("cv_edit_exp",{"id":userForcv.id,"id_exp":experience.id}) : path("cv_edit_exp_client",{"id":userForcv.id,"id_exp":experience.id}) }}"
+                                                >
                                                     +                                                                                                                                                                                                                                                 
                                                 </a>
                                                 {{ btn.add() }}
@@ -116,7 +126,11 @@
                         {{ form_end(RepTache) }}
                     </div>
                     <div class="card-footer">
+                        {% if is_granted('ROLE_ADMIN') %}
                         {{ link.back(path('cv_edit',{'id':userForcv.id})) }}
+                        {% elseif is_granted('ROLE_USER') %}
+                        {{ link.back(path('cv_edit_client',{'id':userForcv.id})) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -127,11 +141,12 @@
     $(document).ready(function() {
         $(".del_tache").click(function() {
             id = $(this).data("delete");
+            let pathDelTask = $(this).data('path');
             if (!isNaN(id)) {
                 if (id != null && id != 0) {
                     if (confirm("Voulez Vous supprimer cette tache ?")) {
                         $.ajax({
-                            url: '{{ path("del_tache_experience",{"id":userForcv.id}) }}',
+                            url: pathDelTask,
                             method: 'POST',
                             dataType: 'JSON',
                             data: {
@@ -169,8 +184,9 @@
         addTache();
 
         function addTache() {
+            let path = $(this).data('path');
             $.ajax({
-                url: '{{ path("cv_edit_exp",{"id":userForcv.id,"id_exp":experience.id}) }}',
+                url: path,
                 method: 'POST',
                 dataType: 'JSON',
                 data: {

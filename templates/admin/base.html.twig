@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="{{ asset('vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <!-- Sweetalert 2 -->
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/magnific-popup/magnific-popup.css') }}"> {% block head %}{% endblock %}{% block stylesheet %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('vendor/magnific-popup/magnific-popup.css') }}"> 
+    {% block head %}{% endblock %}{% block stylesheet %}{% endblock %}
 
 </head>
 
@@ -61,13 +62,34 @@
                     </a>
                 </li>
             </ul>
+        {#<!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+
+             {{ nav.section('Dashboard',{icon: 'fas fa-tachometer-alt',pages:navs.getNavs.dashboard})}} #}
+
+            {# {% if is_granted("ROLE_USER") %}
+                    {{ nav.list(navs.getNavs.dashboard_user,'',parent_page|default('')) }}
+            {% elseif is_granted("ROLE_ADMIN") %}
+              {{ nav.list(navs.getNavs.dashboard,'',parent_page|default('')) }}
+            {% endif %}
+                {{ nav.list(navs.getNavs.user,'User',parent_page|default('')) }}
+            {% if is_granted('ROLE_ADMIN') %}
+            {{ nav.list(navs.getNavs.admin,'Admin',parent_page|default('')) }}
+            {{ nav.section('Admin',{role:'Admin',icon: 'fas fa-cogs',pages:navs.getNavs.admin})}}
+            {% endif %} #}
+
+            {# {{ nav.li({path:'app_logout',name:'log out',icon:'fas fa-power-off'}) }}
+          </ul> #}
         </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="/" class="brand-link">
                 <img src="{{ asset('img/AdminLTELogo.png') }}" alt="{{ app_name }}" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">{{ app_name }}</span>
             </a>
@@ -87,9 +109,18 @@
                 <!-- Sidebar Menu -->
                 {# Modifier le fichier src/twig/NavExtension.php POUR GERER LA NAVIGATION AVEC LES PRIVILEGES #}
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        {# VISIBLE PAR TOUS LES UTILISATEURS #} {{ nav.list(navs.getNavs.navs,parent_page|default('')) }} {% if is_granted('ROLE_EDITOR') %} {# VISIBLE POUR LES EDITEURS ET L'ADMINISTRATEUR #} {{ nav.list(navs.getNavs.editor,parent_page|default('')) }} {% endif
-                        %} {% if is_granted('ROLE_ADMIN') %} {# VISIBLE POUR L'ADMINISTRATEUR #} {{ nav.list(navs.getNavs.admin,parent_page|default('')) }} {% endif %}
+                    <ul class="nav nav-pills nav-sidebar flex-column" 
+                    data-widget="treeview" role="menu" data-accordion="false">
+                        {# VISIBLE PAR TOUS LES UTILISATEURS #} 
+                        {{ nav.list(navs.getNavs.navs,parent_page|default('')) }} 
+                        {% if is_granted('ROLE_EDITOR') %} 
+                        {# VISIBLE POUR LES EDITEURS ET L'ADMINISTRATEUR #} 
+                        {{ nav.list(navs.getNavs.editor,parent_page|default('')) }} 
+                        {% endif %} 
+                        {% if is_granted('ROLE_ADMIN') %} 
+                        {# VISIBLE POUR L'ADMINISTRATEUR #} 
+                        {{ nav.list(navs.getNavs.admin,parent_page|default('')) }} 
+                        {% endif %}
                         <li class="nav-item">
                             <a id="btn-logout" href="#" type="button" class="nav-link  ">
                                 <i class="fas fa-power-off nav-icon"></i>

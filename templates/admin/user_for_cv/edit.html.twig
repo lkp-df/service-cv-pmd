@@ -11,7 +11,7 @@
 				CV de
 				<i>
 					{% if userforcv.sexe == 'homme' %}
-					Mr
+						Mr
 					{% else %}
 						Mme
 					{% endif %}
@@ -62,7 +62,11 @@
 				</div>
 				{{ form_end(form) }}
 				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -102,7 +106,11 @@
 				</div>
 				{{ form_end(contact) }}
 				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -134,7 +142,11 @@
 				</div>
 				{{ form_end(profil) }}
 				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -172,15 +184,19 @@
 										{{ langue.getNiveauPourcent }}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_lg',{'id':userforcv.id,'id_lg':langue.id})) }}
-										<button class="btn btn-sm btn-danger del_lg" data-delete="{{ langue.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN') %}
+											{{ link.edit(path('cv_edit_lg',{'id':userforcv.id,'id_lg':langue.id})) }}
+										{% elseif is_granted('ROLE_USER') %}
+											{{ link.edit(path('cv_edit_client_lg',{'id':userforcv.id,'id_lg':langue.id})) }}
+										{% endif %}
+										<button class="btn btn-sm btn-danger del_lg" data-path="{{ is_granted('ROLE_ADMIN') ? path('del_lg' ,{'id' :userforcv.id}) : path( 'del_lg_client',{ 'id':userforcv.id}) }} " data-delete="{{ langue.id }} ">
+											<i class="fas fa-trash-alt "></i>
 										</button>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Record found
 									</td>
 								</tr>
@@ -191,20 +207,20 @@
 						Voulez-vous ajouter une Langue ?
 					</h3>
 					{{ form_start(RepFormLangue) }}
-					<div class="row">
-						<div class="col-lg-12">
+					<div class="row ">
+						<div class="col-lg-12 ">
 							{{ form_row(RepFormLangue.reponse) }}
 							<div id="show_langue">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												désignation
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Pourcentage
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -213,48 +229,52 @@
 										id="affiche_langue"><!-- coming some place -->
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_langue">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_langue " data-path="{{ is_granted( ' ROLE_ADMIN ') ? path( " cv_edit ",{ "id ":userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepFormLangue) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN ') %}
+						{{ link.back(path('cv_index '),'back to list ') }}
+					{% elseif is_granted('ROLE_USER ') %}
+						{{ link.back(path('client_model_index '),'back to list ') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mb-3">
-		<div class="col-md-12">
-			<div class="card card-outline card-success">
-				<div class="card-header">
+	<div class="row mb-3 ">
+		<div class="col-md-12 ">
+			<div class="card card-outline card-success ">
+				<div class="card-header ">
 					<h3>
 						Logiciels
 					</h3>
 				</div>
-				<div class="card-body">
-					<table class="table table-hover">
+				<div class="card-body ">
+					<table class="table table-hover ">
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col ">
 									designation
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									pourcentage
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									action
 								</th>
 							</tr>
@@ -269,15 +289,20 @@
 										{{ logiciel.getNiveauPourcent }}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_log',{'id':userforcv.id,'id_log':logiciel.id})) }}
-										<button class="btn btn-sm btn-danger del_log" data-delete="{{ logiciel.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN ') %}
+											{{ link.edit(path('cv_edit_log ',{'id ':userforcv.id,'id_log ':logiciel.id})) }}
+										{% elseif is_granted('ROLE_USER ') %}
+											{{ link.edit(path('cv_edit_log_client ',{'id ':userforcv.id,'id_log ':logiciel.id})) }}
+										{% endif
+                                %}
+										<button class="btn btn-sm btn-danger del_log " data-path="{{is_granted( 'ROLE_ADMIN ') ? path( " del_log ",{ "id ":userforcv.id}) : path( 'del_log_client',{ 'id':userforcv.id})}} " data-delete="{{ logiciel.id }} ">
+											<i class="fas fa-trash-alt "></i>
 										</button>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Records Found
 									</td>
 								</tr>
@@ -288,20 +313,20 @@
 						Voulez-vous ajouter un logiciel ?
 					</h3>
 					{{ form_start(RepFormLogiciel) }}
-					<div class="row">
-						<div class="col-lg-12">
+					<div class="row ">
+						<div class="col-lg-12 ">
 							{{ form_row(RepFormLogiciel.reponse) }}
 							<div id="show_logiciel">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												designation
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												pourcentage
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -310,48 +335,52 @@
 										id="affiche_logiciel"><!-- coming some place -->
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_logiciel">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_logiciel" data-path="{{ is_granted('ROLE_ADMIN') ? path('cv_edit',{'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id})}} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepFormLogiciel) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN ') %}
+						{{ link.back(path('cv_index '),'back to list ') }}
+					{% elseif is_granted('ROLE_USER ') %}
+						{{ link.back(path('client_model_index '),'back to list ') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mb-3">
-		<div class="col-md-12">
-			<div class="card card-outline card-success">
-				<div class="card-header">
+	<div class="row mb-3 ">
+		<div class="col-md-12 ">
+			<div class="card card-outline card-success ">
+				<div class="card-header ">
 					<h3>
 						Compétences
 					</h3>
 				</div>
-				<div class="card-body">
-					<table class="table table-hover">
+				<div class="card-body ">
+					<table class="table table-hover ">
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col ">
 									designation
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									pourcentage
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									action
 								</th>
 							</tr>
@@ -367,15 +396,20 @@
 										{{ competence.getNiveauPourcent }}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_comp',{'id':userforcv.id,'id_comp':competence.id})) }}
-										<button class="btn btn-sm btn-danger del_comp" data-delete="{{ competence.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN ') %}
+											{{ link.edit(path('cv_edit_comp ',{'id ':userforcv.id,'id_comp ':competence.id})) }}
+										{% elseif is_granted('ROLE_USER ') %}
+											{{ link.edit(path('cv_edit_comp_client ',{'id ':userforcv.id,'id_comp ':competence.id})) }}
+										{%
+                                endif %}
+										<button class="btn btn-sm btn-danger del_comp " data-delete="{{ competence.id }} " data-path="{{is_granted( 'ROLE_ADMIN ') ? path( " del_comp ",{ "id ":userforcv.id}) : path( 'del_comp_client',{ 'id':userforcv.id}) }} ">
+											<i class="fas fa-trash-alt "></i>
 										</buttton>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Records Found
 
 									</td>
@@ -387,20 +421,20 @@
 						Voulez-vous ajouter une competence ?
 					</h3>
 					{{ form_start(RepFormCompetence) }}
-					<div class="row">
+					<div class="row ">
 						{{ form_row(RepFormCompetence.reponse) }}
-						<div class="col-md-12">
+						<div class="col-md-12 ">
 							<div id="show_competence">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												designation
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												pourcentage
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -409,45 +443,49 @@
 										id="affiche_competence">{# coming some place  #}
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_competence">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_competence " data-path="{{is_granted( 'ROLE_ADMIN ') ? path('cv_edit',{'id':userforcv.id}) : path('cv_edit_client',{'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepFormCompetence) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN ') %}
+						{{ link.back(path('cv_index '),'back to list ') }}
+					{% elseif is_granted('ROLE_USER ') %}
+						{{ link.back(path('client_model_index '),'back to list ') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mb-3">
-		<div class="col-lg-12">
-			<div class="card card-outline card-success">
-				<div class="card-header">
+	<div class="row mb-3 ">
+		<div class="col-lg-12 ">
+			<div class="card card-outline card-success ">
+				<div class="card-header ">
 					<h3>
 						Centre D'interet
 					</h3>
 				</div>
-				<div class="card-body">
-					<table class="table table-hover">
+				<div class="card-body ">
+					<table class="table table-hover ">
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col ">
 									description
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									actions
 								</th>
 							</tr>
@@ -459,15 +497,19 @@
 										{{ centreInteret.designation }}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_ci',{'id':userforcv.id,'id_ci':centreInteret.id})) }}
-										<button class="btn btn-sm btn-danger del_ci" data-delete="{{ centreInteret.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN') %}
+											{{ link.edit(path('cv_edit_ci',{'id':userforcv.id,'id_ci':centreInteret.id})) }}
+										{% elseif is_granted('ROLE_USER') %}
+											{{ link.edit(path('cv_edit_ci_client',{'id':userforcv.id,'id_ci':centreInteret.id})) }}
+										{% endif %}
+										<button class="btn btn-sm btn-danger del_ci " data-delete="{{ centreInteret.id }} " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'del_ci',{ 'id':userforcv.id}) : path( 'del_ci_client',{ 'id':userforcv.id}) }} ">
+											<i class="fas fa-trash-alt "></i>
 										</button>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Records Found
 
 									</td>
@@ -480,18 +522,18 @@
 						vouez-vous ajouter un autre centre d'interet ?
 					</h3>
 					{{ form_start(RepCentreInteret) }}
-					<div class="row">
+					<div class="row ">
 						{{ form_row(RepCentreInteret.reponse) }}
 						{{ form_row(RepCentreInteret._token) }}
-						<div class="col-md-12">
+						<div class="col-md-12 ">
 							<div id="show_centre_interet">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												designation
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -500,57 +542,61 @@
 										id="affiche_centre_interet">{# coming some place #}
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_centre_interet">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_centre_interet " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id})}} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepFormCompetence) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mb-3">
-		<div class="col-lg-12">
-			<div class="card card-outline card-success">
-				<div class="card-header">
+	<div class="row mb-3 ">
+		<div class="col-lg-12 ">
+			<div class="card card-outline card-success ">
+				<div class="card-header ">
 					<h3>
 						Formations
 					</h3>
 				</div>
-				<div class="card-body">
-					<table class="table table-hover">
+				<div class="card-body ">
+					<table class="table table-hover ">
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col ">
 									Dimplome
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Annee
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Ecole
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Ville
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Pays
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									actions
 								</th>
 							</tr>
@@ -574,15 +620,20 @@
 										{{ formation.pays }}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_forma',{'id':userforcv.id,'id_forma':formation.id})) }}
-										<button class="btn btn-sm btn-danger del_forma" data-delete="{{ formation.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN') %}
+											{{ link.edit(path('cv_edit_forma',{'id':userforcv.id,'id_forma':formation.id})) }}
+										{% elseif is_granted('ROLE_USER') %}
+											{{ link.edit(path('cv_edit_forma_client',{'id':userforcv.id,'id_forma':formation.id})) }}
+										{% endif
+                                %}
+										<button class="btn btn-sm btn-danger del_forma " data-delete="{{ formation.id }} " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'del_forma',{ 'id':userforcv.id}) : path( 'del_forma_client',{ 'id':userforcv.id}) }} ">
+											<i class="fas fa-trash-alt "></i>
 										</button>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Records Found
 
 									</td>
@@ -595,30 +646,30 @@
 						Voulez-vous ajouter une autre formation ?
 					</h3>
 					{{ form_start(RepFormation) }}
-					<div class="row">
+					<div class="row ">
 						{{ form_row(RepFormation.reponse) }}
 						{{ form_row(RepFormation._token) }}
-						<div class="col-md-12">
+						<div class="col-md-12 ">
 							<div id="show_formation">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												Diplome
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Année
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Ecole
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Ville
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Pays
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -627,54 +678,58 @@
 										id="affiche_formation">{# coming some place #}
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_formation">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_formation " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepFormation) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mb-3">
-		<div class="col-lg-12">
-			<div class="card card-outline card-success">
-				<div class="card-header">
+	<div class="row mb-3 ">
+		<div class="col-lg-12 ">
+			<div class="card card-outline card-success ">
+				<div class="card-header ">
 					<h3>
 						Experiences Professionnelles
 					</h3>
 				</div>
-				<div class="card-body">
-					<table class="table table-hover">
+				<div class="card-body ">
+					<table class="table table-hover ">
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col ">
 									Poste Occupé
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Entreprise
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Anne
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									Taches
 								</th>
-								<th scope="col">
+								<th scope="col ">
 									actions
 								</th>
 							</tr>
@@ -699,15 +754,19 @@
 										{% endfor %}
 									</td>
 									<td>
-										{{ link.edit(path('cv_edit_exp',{'id':userforcv.id,'id_exp':experience.id})) }}
-										<button class="btn btn-sm btn-danger del_experience" data-delete="{{ experience.id }}">
-											<i class="fas fa-trash-alt"></i>
+										{% if is_granted('ROLE_ADMIN') %}
+											{{ link.edit(path('cv_edit_exp',{'id':userforcv.id,'id_exp':experience.id})) }}
+										{% elseif is_granted('ROLE_USER') %}
+											{{ link.edit(path('cv_edit_exp_client',{'id':userforcv.id,'id_exp':experience.id})) }}
+										{% endif %}
+										<button class="btn btn-sm btn-danger del_experience " data-delete="{{ experience.id }} " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'del_exp',{ 'id':userforcv.id}) : path( 'del_exp_client',{ 'id':userforcv.id}) }} ">
+											<i class="fas fa-trash-alt "></i>
 										</button>
 									</td>
 								</tr>
 							{% else %}
 								<tr>
-									<td class="text-center w-100">
+									<td class="text-center w-100 ">
 										No Records Found
 									</td>
 								</tr>
@@ -718,27 +777,27 @@
 						Voulez-vous ajouter une autre Experience Professionnelle ?
 					</h3>
 					{{ form_start(RepExperience) }}
-					<div class="row">
+					<div class="row ">
 						{{ form_row(RepExperience.reponse) }}
 						{{ form_row(RepExperience._token) }}
-						<div class="col-md-12">
+						<div class="col-md-12 ">
 							<div id="show_experience_pro">
-								<table class="table table-hover">
+								<table class="table table-hover ">
 									<thead>
 										<tr>
-											<th scope="col">
+											<th scope="col ">
 												Poste Occupé
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Entreprise
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Année
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												Taches
 											</th>
-											<th scope="col">
+											<th scope="col ">
 												action
 											</th>
 										</tr>
@@ -747,25 +806,29 @@
 										id="affiche_experience">{# coming some place #}
 									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-4"></div>
-									<div class="col-md-4">
-										<div class="btn-group">
-											<a href="#" class="btn btn-success add_experience_pro">
+								<div class="row ">
+									<div class="col-md-4 "></div>
+									<div class="col-md-4 ">
+										<div class="btn-group ">
+											<a href="# " class="btn btn-success add_experience_pro " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id' : userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
 										</div>
 									</div>
-									<div class="col-md-4"></div>
+									<div class="col-md-4 "></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{{ form_end(RepExperience) }}
 				</div>
-				<div class="card-footer">
-					{{ link.back(path('cv_index'),'back to list') }}
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ link.back(path('cv_index'),'back to list') }}
+					{% elseif is_granted('ROLE_USER') %}
+						{{ link.back(path('client_model_index'),'back to list') }}
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -774,13 +837,14 @@
 {% block javascripts %}
 	<script>
 		$(document).ready(function () {
-$(".del_lg").click(function () {
-id = $(this).data("delete");
+$(".del_lg ").click(function () {
+id = $(this).data('delete');
+let pathDelLg = $(this).data('path')
 if (!isNaN(id)) {
 if (id != null && id != 0) {
-if (confirm("Voulez Vous supprimer cette langue ?")) {
+if (confirm("Voulez Vous supprimer cette langue ? ")) {
 $.ajax({
-url: '{{ path("del_lg",{"id":userforcv.id}) }}',
+url: pathDelLg,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -788,11 +852,11 @@ idL: id
 },
 success: function (data) {
 
-if (data === "ok") {
-alert("Langue supprimée correctement");
-window.location.href = "";
+if (data === 'ok') {
+alert("Langue supprimée correctement ");
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
@@ -802,11 +866,12 @@ alert("Suppression Impossible :(");
 });
 $('.del_log').click(function () {
 let id = $(this).data('delete');
+let pathDelLog = $(this).data('path');
 if (!isNaN(id)) {
 if (id != null && id != 0) {
-if (confirm("Voulez Vous supprimer cette langue ?")) {
+if (confirm("Voulez Vous supprimer cette langue ? ")) {
 $.ajax({
-url: '{{ path("del_log",{"id":userforcv.id}) }}',
+url: pathDelLog,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -814,11 +879,11 @@ idLog: id
 },
 success: function (data) {
 
-if (data === "ok") {
-alert("Logiciel supprimé correctement");
-window.location.href = "";
+if (data === 'ok') {
+alert("Logiciel supprimé correctement ");
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
@@ -827,21 +892,22 @@ alert("Suppression Impossible :(");
 }
 });
 $('.del_comp').click(function () {
-let idComp = $(this).data("delete");
-if (confirm("Voulez-vous supprimer cette compétence ?")) {
+let idComp = $(this).data('delete');
+let pathDelComp = $(this).data('path');
+if (confirm("Voulez-vous supprimer cette compétence ? ")) {
 $.ajax({
-url: '{{ path("del_comp",{"id":userforcv.id}) }}',
+url: pathDelComp,
 method: 'POST',
 dataType: 'JSON',
 data: {
 idComp: idComp
 },
 success: function (data) {
-if (data == "ok") {
-alert("Compétence Supprimée correctement");
-window.location.href = "";
+if (data == 'ok') {
+alert("Compétence Supprimée correctement ");
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
@@ -849,63 +915,66 @@ alert("Suppression Impossible :(");
 });
 
 $('.del_ci').click(function () {
-let idCi = $(this).data("delete");
-if (confirm("Voulez-vous supprimer ce centre d'interet ?")) {
+let idCi = $(this).data('delete');
+let pathDelCI = $(this).data('path');
+if (confirm("Voulez-vous supprimer ce centre d 'interet ?")) {
 $.ajax({
-url: '{{ path("del_ci",{"id":userforcv.id}) }}',
+url: pathDelCI,
 method: 'POST',
 dataType: 'JSON',
 data: {
 idCi: idCi
 },
 success: function (data) {
-if (data == "ok") {
+if (data == 'ok') {
 alert("Centre D'interet Supprimé correctement");
-window.location.href = "";
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
 }
 });
 $('.del_forma').click(function () {
-let idFo = $(this).data("delete");
-if (confirm("Voulez-vous supprimer cette formation?")) {
+let idFo = $(this).data('delete');
+let pathDelFor = $(this).data('path');
+if (confirm("Voulez-vous supprimer cette formation? ")) {
 $.ajax({
-url: '{{ path("del_forma",{"id":userforcv.id}) }}',
+url: pathDelFor,
 method: 'POST',
 dataType: 'JSON',
 data: {
 idFo: idFo
 },
 success: function (data) {
-if (data == "ok") {
-alert("Formation supprimée correctement");
-window.location.href = "";
+if (data == 'ok') {
+alert("Formation supprimée correctement ");
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
 }
 });
 $('.del_experience').click(function () {
-let idExp = $(this).data("delete");
-if (confirm("Voulez-vous supprimer cette Experence Professionnelle ?")) {
+let idExp = $(this).data('delete');
+let pathDelExp = $(this).data('path');
+if (confirm("Voulez-vous supprimer cette Experence Professionnelle ? ")) {
 $.ajax({
-url: '{{ path("del_exp",{"id":userforcv.id}) }}',
+url: pathDelExp,
 method: 'POST',
 dataType: 'JSON',
 data: {
 idExp: idExp
 },
 success: function (data) {
-if (data == "ok") {
-alert("Experience Professionnelle supprimée correctement");
-window.location.href = "";
+if (data == 'ok') {
+alert("Experience Professionnelle supprimée correctement ");
+window.location.href = " ";
 } else {
-alert("Suppression Impossible :(");
+alert("Suppression Impossible :( ");
 }
 }
 })
@@ -921,11 +990,13 @@ addLangue();
 $("#show_langue").hide(500);
 $("#rep_langue_reponse_0").click(function () {
 $("#show_langue").show(500);
-})
+});
+
 $("#rep_langue_reponse_1").click(function () {
 $("#show_langue").hide(500);
 });
-$('#show_logiciel').hide((500));
+
+$("#show_logiciel").hide(500);
 $("#rep_logiciel_reponse_0").click(function () {
 $("#show_logiciel").show(500);
 });
@@ -942,61 +1013,62 @@ $("#show_competence").show(500);
 $("#rep_competence_reponse_1").click(function () {
 $("#show_competence").hide(500);
 });
-$(document).on("click", ".remove_logiciel", function () {
+$(document).on("click", ".remove_logiciel ", function () {
 $(this).closest('tr').remove();
 });
 $(".add_competence").click(function () {
 addCompetence();
 });
-$(document).on("click", ".remove_competence", function () {
+$(document).on("click ", ".remove_competence ", function () {
 $(this).closest('tr').remove();
 });
-$("#show_centre_interet").hide(500);
-$("#rep_centre_interet_reponse_0").on("click", function () {
-$("#show_centre_interet").show(500);
+$("#show_centre_interet ").hide(500);
+$("#rep_centre_interet_reponse_0 ").on("click ", function () {
+$("#show_centre_interet ").show(500);
 });
-$("#rep_centre_interet_reponse_1").on("click", function () {
-$("#show_centre_interet").hide(500);
+$("#rep_centre_interet_reponse_1 ").on("click ", function () {
+$("#show_centre_interet ").hide(500);
 });
-$(".add_centre_interet").click(function () {
+$(".add_centre_interet ").click(function () {
 addCentreInteret();
 });
-$(document).on("click", ".remove_centre_interet", function () {
-$(this).closest("tr").remove()
+$(document).on("click ", ".remove_centre_interet ", function () {
+$(this).closest("tr ").remove()
 });
-$("#show_formation").hide(500);
-$("#rep_formation_reponse_0").click(function () {
-$("#show_formation").show(500);
+$("#show_formation ").hide(500);
+$("#rep_formation_reponse_0 ").click(function () {
+$("#show_formation ").show(500);
 });
-$("#rep_formation_reponse_1").click(function () {
-$("#show_formation").hide(500);
+$("#rep_formation_reponse_1 ").click(function () {
+$("#show_formation ").hide(500);
 });
-$(".add_formation").click(function () {
+$(".add_formation ").click(function () {
 addFormation();
 });
-$(document).on("click", ".remove_formation", function () {
-$(this).closest("tr").remove();
+$(document).on("click ", ".remove_formation ", function () {
+$(this).closest("tr ").remove();
 });
 
-$(".add_experience_pro").click(function () {
+$(".add_experience_pro ").click(function () {
 addExperiencePro();
 });
-$(document).on("click", ".remove_experience_pro", function () {
-$(this).closest("tr").remove();
+$(document).on("click ", ".remove_experience_pro ", function () {
+$(this).closest("tr ").remove();
 });
-$("#show_experience_pro").hide(500);
-$("#rep_experience_pro_reponse_0").click(function () {
-$("#show_experience_pro").show(500);
+$("#show_experience_pro ").hide(500);
+$("#rep_experience_pro_reponse_0 ").click(function () {
+$("#show_experience_pro ").show(500);
 });
-$("#rep_experience_pro_reponse_1").click(function () {
-$("#show_experience_pro").hide(500);
+$("#rep_experience_pro_reponse_1 ").click(function () {
+$("#show_experience_pro ").hide(500);
 });
 /******** Function part ******/
 addLangue();
 
 function addLangue() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -1010,8 +1082,9 @@ $('#affiche_langue').append(data);
 addLogiciel();
 
 function addLogiciel() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -1025,8 +1098,9 @@ $('#affiche_logiciel').append(data);
 addCompetence();
 
 function addCompetence() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -1040,8 +1114,9 @@ $('#affiche_competence').append(data);
 addCentreInteret();
 
 function addCentreInteret() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -1055,8 +1130,9 @@ $('#affiche_centre_interet').append(data);
 addFormation();
 
 function addFormation() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {
@@ -1070,8 +1146,9 @@ $('#affiche_formation').append(data);
 addExperiencePro();
 
 function addExperiencePro() {
+let path = $(this).data('path');
 $.ajax({
-url: '{{ path("cv_edit",{"id":userforcv.id}) }}',
+url: path,
 method: 'POST',
 dataType: 'JSON',
 data: {

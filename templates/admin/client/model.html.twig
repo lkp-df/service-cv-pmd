@@ -1,0 +1,74 @@
+{% extends 'admin/base.html.twig' %}
+{% import "macros/link.html.twig" as link %}
+{% import "macros/dataTable.html.twig" as dataTable %}
+{% import "macros/alertes.html.twig" as alert %}
+{% block title %}Liste  CV
+{% endblock %}
+{% block head %}
+	{{ dataTable.head()
+}}
+{% endblock %}
+{% block foot %}
+	{{ dataTable.js() }}
+{% endblock %}
+{% block javascripts %}
+	{{ dataTable.script('#table-1') }}
+{% endblock %}
+{% block body %}
+
+
+	<div class="card card-outline card-blue">
+		<div class="card-header">
+			<h3>Tous Mes CV Disponibles</h3>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<h3>
+						{{ link.add(path('model_new'),'Create new') }}
+					</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table" id="table-1">
+						<thead>
+							<tr>
+								<th>Profil
+								</th>
+								<th>Poste Recherchré
+								</th>
+								<th>Date Creation</th>
+								<th>actions</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for cv in app.user.mesCv %}
+								<tr>
+									<td>
+										{% for profil in cv.getUserForCv.getProfils %}
+											{{profil.description}}
+										{% endfor %}
+									</td>
+									<td>
+										{{ cv.getUserForCv.getPosteRechercheOccupe }}
+									</td>
+									<td>
+										{{ cv.getCreatedAt ? cv.getCreatedAt | date('Y-m-d H:i:s') : '' }}
+									</td>
+									<td>
+										{{link.show()}}
+										{{link.edit(path("cv_edit_client",{'id':cv.getUserForCv.getId}))}}
+									</td>
+								</tr>
+							{% else %}
+								no entry
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

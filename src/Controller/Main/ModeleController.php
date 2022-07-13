@@ -14,7 +14,6 @@ class ModeleController extends AbstractController
      */
     public function index(ModelCvRepository $modelCvRepository): Response
     {
-
         return $this->render('main/modele/index.html.twig', [
             'modeles' => $modelCvRepository->findAll(),
         ]);

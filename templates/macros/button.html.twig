@@ -1,40 +1,43 @@
 {% macro edit(title) %}
-    <button type="submit" class="btn btn-success"><i class="fas fa-pencil-alt"></i></button>
+	<button type="submit" class="btn btn-success">
+		<i class="fas fa-pencil-alt"></i>
+	</button>
 {% endmacro %}
 {% macro update() %}
-    <button type="submit" class="btn btn-success">Update</button>
+	<button type="submit" class="btn btn-success">Update</button>
 {% endmacro %}
-{% macro add() %}
-    <button type="submit" class="btn btn-primary"><i class="fas fa-pencil-alt"></i>Save</button>
+{% macro add(button_label = 'Save') %}
+	<button type="submit" class="btn btn-{{ button_label == 'update' ? 'primary':'success'}}">
+		<i class="fas fa-pencil-alt"></i>
+		{{ button_label }}</button>
 {% endmacro %}
 
 {% macro delete() %}
-    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+	<button type="submit" class="btn btn-danger">
+		<i class="fas fa-trash-alt"></i>
+	</button>
 {% endmacro %}
 
 {% macro order(state) %}
-    {% set type = '' %}
-    {% set title = '???' %}
-    {% if state == 'completed' %}
-        {% set  type = 'success' %}
-    {% endif %}
+	{% set type = '' %}
+	{% set title = '???' %}
+	{% if state == 'completed' %}
+		{% set  type = 'success' %}
+	{% endif %}
 
-    {% if state == 'canceled' %}
-        {% set  type = 'danger' %}
-    {% endif %}
+	{% if state == 'canceled' %}
+		{% set  type = 'danger' %}
+	{% endif %}
 
-    {% if state == 'waiting' %}
-        {% set  type = 'default' %}
-    {% endif %}
+	{% if state == 'waiting' %}
+		{% set  type = 'default' %}
+	{% endif %}
 
-    {% if state == 'in progress' %}
-        {% set  type = 'info' %}
-    {% endif %}
+	{% if state == 'in progress' %}
+		{% set  type = 'info' %}
+	{% endif %}
 
-    <button 
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="{{ title }}" class="btn btn-{{type}} ">   
-             {{ state|trans }}
-    </button>  
+	<button data-toggle="tooltip" data-placement="bottom" title="{{ title }}" class="btn btn-{{type}} ">
+		{{ state|trans }}
+	</button>
 {% endmacro %}

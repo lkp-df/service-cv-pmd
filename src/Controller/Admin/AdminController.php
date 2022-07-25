@@ -15,8 +15,7 @@ class AdminController extends AbstractController
         $this->translator = $translatorInterface;
     }
     /**
-     * @Route("/admin/", name="admin")
-     * @Route("/client/", name="client_index")
+     * @Route("/my-account/", name="admin")
      */
     public function index(): Response
     {

@@ -24,6 +24,47 @@ class NavExtension extends AbstractExtension
     {
         return
             [
+                'user' =>
+                [
+                    [
+                        'name'=>'Tableau de bord',
+                        'icon' => 'fas fa-tachometer-alt',
+                        'links' => [
+                            [
+                                'name' => $this->translator->trans('Dashboard') . ' 1',
+                                'path' => 'admin'
+                            ]
+                        ]
+                    ],
+                    [
+                        'name'=>'Curicilium Vitae',
+                        'links' =>
+                        [
+                            [
+                                'name' => 'Mes cvs',
+                                'path' => 'client_cv_index'
+                            ],
+                            [
+                                'name' => 'Nouveau Cv',
+                                'path' => 'cv_new'
+                            ]
+                        ]
+
+                    ],
+                    // [
+                    //     'name'=>'Mes models',
+                    //     'path'=>''
+                    // ],
+                    [
+                        'name'=>'Abonnement',
+                        'links'=>
+                        [
+                            ['name'=>'Mes abonnements','path'=>'admin_abonnement_index'],
+                            ['name'=>'Nouveau Abonnement','path'=>'admin_abonnement_new']
+                        ]
+                    ]
+
+                ],
                 'app' =>
                 [],
                 'admin' =>
@@ -75,38 +116,6 @@ class NavExtension extends AbstractExtension
                             ['name' => 'New Types', 'path' => 'admin_type_abonnement_new']
                         ]
                     ],
-                    [
-                        'name'=>'Abonnements',
-                        'links'=>
-                        [
-                            ['name'=>'Les Abonnements','path'=>'admin_abonnement_index'],
-                            ['name'=>'New Abonnement','path'=>'admin_abonnement_new']
-                        ]
-                    ]
-                ],
-                'user' => [],
-                'navs' =>
-                [
-                    [
-                        'name'=>'Tableau de bord',
-                        'icon' => 'fas fa-tachometer-alt',
-                        'links' => [
-                            [
-                                'name' => $this->translator->trans('Dashboard') . ' 1',
-                                'path' => 'admin'
-                            ]
-                        ]
-                    ],
-                    [
-                        'name'=>'Cv',
-                        'links' => [
-                            [
-                                'name' => 'Liste CV',
-                                'path' => 'client_model_index'
-                            ]
-                        ]
-                    ],
-
                 ],
                 'dashboard' =>
                 [

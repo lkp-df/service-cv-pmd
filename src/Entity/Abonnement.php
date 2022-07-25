@@ -10,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Abonnement
 {
+    const STATUS =[
+        'Actif'=>'Actif',
+        'Terminer'=>'Terminer'
+    ];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -65,7 +65,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>
@@ -109,7 +109,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>
@@ -145,7 +145,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>
@@ -233,7 +233,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_langue " data-path="{{ is_granted( ' ROLE_ADMIN ') ? path( " cv_edit ",{ "id ":userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
+											<a href="# " class="btn btn-success add_langue " data-path="{{ is_granted( ' ROLE_ADMIN ') ? path( " cv_edit ",{ "id ":userforcv.id}) : path( 'cv_edit',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -250,7 +250,7 @@
 					{% if is_granted('ROLE_ADMIN ') %}
 						{{ link.back(path('cv_index '),'back to list ') }}
 					{% elseif is_granted('ROLE_USER ') %}
-						{{ link.back(path('client_model_index '),'back to list ') }}
+						{{ link.back(path('client_cv_index '),'back to list ') }}
 					{% endif %}
 				</div>
 			</div>
@@ -339,7 +339,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_logiciel" data-path="{{ is_granted('ROLE_ADMIN') ? path('cv_edit',{'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id})}} ">
+											<a href="# " class="btn btn-success add_logiciel" data-path="{{ is_granted('ROLE_ADMIN') ? path('cv_edit',{'id':userforcv.id}) : path( 'cv_edit',{ 'id':userforcv.id})}} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -356,7 +356,7 @@
 					{% if is_granted('ROLE_ADMIN ') %}
 						{{ link.back(path('cv_index '),'back to list ') }}
 					{% elseif is_granted('ROLE_USER ') %}
-						{{ link.back(path('client_model_index '),'back to list ') }}
+						{{ link.back(path('client_cv_index '),'back to list ') }}
 					{% endif %}
 				</div>
 			</div>
@@ -447,7 +447,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_competence " data-path="{{is_granted( 'ROLE_ADMIN ') ? path('cv_edit',{'id':userforcv.id}) : path('cv_edit_client',{'id':userforcv.id}) }} ">
+											<a href="# " class="btn btn-success add_competence " data-path="{{is_granted( 'ROLE_ADMIN ') ? path('cv_edit',{'id':userforcv.id}) : path('cv_edit',{'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -464,7 +464,7 @@
 					{% if is_granted('ROLE_ADMIN ') %}
 						{{ link.back(path('cv_index '),'back to list ') }}
 					{% elseif is_granted('ROLE_USER ') %}
-						{{ link.back(path('client_model_index '),'back to list ') }}
+						{{ link.back(path('client_cv_index '),'back to list ') }}
 					{% endif %}
 				</div>
 			</div>
@@ -546,7 +546,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_centre_interet " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id})}} ">
+											<a href="# " class="btn btn-success add_centre_interet " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit',{ 'id':userforcv.id})}} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -563,7 +563,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>
@@ -682,7 +682,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_formation " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
+											<a href="# " class="btn btn-success add_formation " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id':userforcv.id}) : path( 'cv_edit',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -699,7 +699,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>
@@ -810,7 +810,7 @@
 									<div class="col-md-4 "></div>
 									<div class="col-md-4 ">
 										<div class="btn-group ">
-											<a href="# " class="btn btn-success add_experience_pro " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id' : userforcv.id}) : path( 'cv_edit_client',{ 'id':userforcv.id}) }} ">
+											<a href="# " class="btn btn-success add_experience_pro " data-path="{{is_granted( 'ROLE_ADMIN') ? path( 'cv_edit',{ 'id' : userforcv.id}) : path( 'cv_edit',{ 'id':userforcv.id}) }} ">
 												+
 											</a>
 											{{ btn.add() }}
@@ -827,7 +827,7 @@
 					{% if is_granted('ROLE_ADMIN') %}
 						{{ link.back(path('cv_index'),'back to list') }}
 					{% elseif is_granted('ROLE_USER') %}
-						{{ link.back(path('client_model_index'),'back to list') }}
+						{{ link.back(path('client_cv_index'),'back to list') }}
 					{% endif %}
 				</div>
 			</div>

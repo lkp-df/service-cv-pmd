@@ -11,10 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/abonnement")
+ * @Route("/my-account/abonnement")
  */
 class AbonnementController extends AbstractController
 {
+    private $parent_page = 'Abonnement';
+
     /**
      * @Route("/", name="admin_abonnement_index", methods={"GET"})
      */
@@ -22,6 +24,7 @@ class AbonnementController extends AbstractController
     {
         return $this->render('admin/abonnement/index.html.twig', [
             'abonnements' => $abonnementRepository->findAll(),
+            'parent_page'=>$this->parent_page
         ]);
     }
 
@@ -38,10 +41,9 @@ class AbonnementController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($abonnement);
             $entityManager->flush();
-
+            $this->addFlash('success','Enregistrement modifié');
             return $this->redirectToRoute('admin_abonnement_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('admin/abonnement/new.html.twig', [
             'abonnement' => $abonnement,
             'form' => $form,

@@ -16,13 +16,23 @@ class AbonnementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('debut',DateType::class,
+            ->add(
+                'debut',
+                DateType::class,
                 ['widget' => 'single_text']
             )
-            ->add('fin',DateType::class,
+            ->add(
+                'fin',
+                DateType::class,
                 ['widget' => 'single_text']
             )
-            ->add('statut')
+            ->add('statut', ChoiceType::class, [
+                'placeholder' => "Selectionner le status",
+                'choices' => Abonnement::STATUS,
+                'attr' => [
+                    'class' => 'select2'
+                ],
+            ])
             ->add(
                 'typeAbonnement',
                 EntityType::class,

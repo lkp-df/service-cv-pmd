@@ -5,7 +5,7 @@
 {% block title %}Liste  CV
 {% endblock %}
 {% block head %}
-	{{ dataTable.head()
+	{{ dataTable.css()
 }}
 {% endblock %}
 {% block foot %}
@@ -16,10 +16,9 @@
 {% endblock %}
 {% block body %}
 
-
 	<div class="card card-outline card-blue">
 		<div class="card-header">
-			<h3>Tous Mes CV Disponibles</h3>
+			<div class="card-title">Liste des curicilium vitae</div>
 		</div>
 		<div class="card-body">
 			<div class="row">
@@ -59,7 +58,7 @@
 									</td>
 									<td>
 										{{link.show()}}
-										{{link.edit(path("cv_edit_client",{'id':cv.getUserForCv.getId}))}}
+										{{link.edit(path("cv_edit",{'id':cv.getUserForCv.getId}))}}
 									</td>
 								</tr>
 							{% else %}

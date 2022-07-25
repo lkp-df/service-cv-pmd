@@ -112,7 +112,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" 
                     data-widget="treeview" role="menu" data-accordion="false">
                         {# VISIBLE PAR TOUS LES UTILISATEURS #} 
-                        {{ nav.list(navs.getNavs.navs,parent_page|default('')) }} 
+                        {{ nav.list(navs.getNavs.user,parent_page|default('')) }} 
                         {% if is_granted('ROLE_EDITOR') %} 
                         {# VISIBLE POUR LES EDITEURS ET L'ADMINISTRATEUR #} 
                         {{ nav.list(navs.getNavs.editor,parent_page|default('')) }} 

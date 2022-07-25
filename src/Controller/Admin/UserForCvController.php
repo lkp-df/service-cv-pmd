@@ -58,21 +58,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UserForCvController extends AbstractController
 {
     private $parent_name = 'Curicilium Vitae';
-   
 
     /**
-     * @Route("/admin/cv/", name="cv_index", methods={"GET"})
+     * @Route("/my-account/cv/", name="cv_index", methods={"GET"})
      */
     public function index(UserForCvRepository $userForCvRepository): Response
     {
         return $this->render('admin/user_for_cv/index.html.twig', [
             'user_for_cvs' => $userForCvRepository->findAll(),
-            'parent_page'=>$this->parent_name
+            'parent_page' => $this->parent_name
         ]);
     }
 
     /**
-     * @Route("/admin/cv/new", name="cv_new", methods={"GET","POST"})
+     * @Route("/my-account/curicilium-vitae/new", name="cv_new", methods={"GET","POST"})
      */
     public function new(Request $request, UserForCvRepository $repo, ExperienceProfessionnelleRepository $ex): Response
     {
@@ -424,7 +423,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/admin/cv/{id}", name="cv_show", methods={"GET"})
+     * @Route("/my-account/curicilium-vitae/{id}", name="cv_show", methods={"GET"})
      */
     public function show(UserForCv $userForCv): Response
     {
@@ -434,16 +433,9 @@ class UserForCvController extends AbstractController
     }
 
     /**
-     * @Route("/admin/cv/{id}/edit", name="cv_edit", methods={"GET","POST"})
-     * @Route("/client/cv/{id}/edit", name="cv_edit_client", methods={"GET","POST"})
+     * @Route("/my-account/curicilium-vitae/{id}/edit", name="cv_edit", methods={"GET","POST"})
      */
-    public function edit(
-        Request $request,
-        UserForCv $userForCv,
-        ContactRepository $c,
-        ProfilRepository $p,
-        ExperienceProfessionnelleRepository $ex
-    ): Response {
+    public function edit(Request $request, UserForCv $userForCv, ContactRepository $c, ProfilRepository $p, ExperienceProfessionnelleRepository $ex ): Response {
         $form = $this->createForm(UserForCvType::class, $userForCv);
         $form->handleRequest($request);
 
@@ -1206,7 +1198,7 @@ class UserForCvController extends AbstractController
                 }
             }
             #add message flash
-           // dd($request->get("_route"));
+            // dd($request->get("_route"));
             if ($request->get("_route") == "cv_edit_exp") {
                 return $this->redirectToRoute('cv_edit_exp', [
                     'id' => $userForCv->getId(),
@@ -1218,7 +1210,6 @@ class UserForCvController extends AbstractController
                     'id_exp' => $exp->find($id_exp)->getId()
                 ], Response::HTTP_SEE_OTHER);
             }
-
         }
         return $this->renderForm(
             "admin/user_for_cv/experience_pro_edit.html.twig",

@@ -2,7 +2,7 @@
 
 {% block title %}Register{% endblock %}
 
-{% block body %}
+{% block main %}
     <div class="container my-5">
         <div class="row">
             <div class="col-6 mx-auto">
@@ -10,7 +10,7 @@
                     <div class="alert alert-danger" role="alert">{{ flashError }}</div>
                 {% endfor %}
 
-                <h1>Register</h1>
+                <h1>Creér un compte</h1>
 
                 {{ form_start(registrationForm,{
                     attr:{
@@ -18,9 +18,9 @@
                     }
                 }) }}
                     {{ form_row(registrationForm.email) }}
-                    {{ form_row(registrationForm.personne.firstName) }}
-                    {{ form_row(registrationForm.personne.lastName) }}
-                    {{ form_row(registrationForm.plainPassword, {
+                    {{ form_row(registrationForm.personne.FirstName) }}
+                    {{ form_row(registrationForm.personne.LastName) }}
+                    {{ form_row(registrationForm.password, {
                         label: 'Password'
                     }) }}
                     {{ form_row(registrationForm.agreeTerms) }}

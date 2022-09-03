@@ -57,7 +57,7 @@
 										{{ cv.getCreatedAt ? cv.getCreatedAt | date('Y-m-d H:i:s') : '' }}
 									</td>
 									<td>
-										{{link.show()}}
+										{{link.show(path('my_cv_show',{id:cv.id}))}}
 										{{link.edit(path("cv_edit",{'id':cv.getUserForCv.getId}))}}
 									</td>
 								</tr>

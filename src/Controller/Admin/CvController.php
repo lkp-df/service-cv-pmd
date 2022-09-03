@@ -7,17 +7,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ClientController extends AbstractController
+class CvController extends AbstractController
 {
 
+    private $parent_page = 'Curicilium Vitae';
+
     /**
-     * @Route("/my-account/curicilium-vitae", name="client_cv_index")
+     * @Route("/my-account/my-curicilium-vitae", name="my_cv_index")
      */
-    public function model(CvRepository $cv)
+    public function cv(CvRepository $cv)
     {
         //affichons les cv d'un user la date de creation, son profil,le poste recherche pour le cv
-        return $this->render(
-            'admin/client/model.html.twig'
-        );
+        return $this->render('admin/cv/index.html.twig',[
+            'parent_page'=>$this->parent_page
+        ]);
     }
 }

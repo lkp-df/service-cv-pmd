@@ -21,13 +21,7 @@
 					<div class="card-title">Mes abonnements</div>
 				</div>
 				<div class="card-body">
-					<div class="row">
-						<div class="col-12">
-							<h3>
-								{{link.add(path('admin_abonnement_new'),'Create New')}}
-							</h3>
-						</div>
-					</div>
+					
 					<div class="row">
 						<div class="col-md-12 col-lg-12">
 							<table id="#table-1" class="table">
@@ -41,7 +35,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for abonnement in abonnements %}
+									{% for abonnement in app.user.abonnements %}
 										<tr>
 											<td>{{ abonnement.typeAbonnement.designation }}</td>
 											<td>{{ abonnement.debut ? abonnement.debut|date('Y-m-d H:i:s') : '' }}</td>

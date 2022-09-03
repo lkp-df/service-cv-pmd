@@ -23,6 +23,8 @@
 		href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 		<!-- Style -->
 		<link rel="stylesheet" href="{{ asset('css/pmd.css') }}">
+		    <!-- Sweetalert 2 -->
+			<link rel="stylesheet" href="{{ asset('vendor/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
 		<!--link rel="stylesheet" href="swiper.min.css"-->
 		<!-- min . css-->
@@ -49,12 +51,12 @@
 		<button onclick="topFunction()" id="btn-scroll" class="bg-3" title="Go to top">
 			<i class="fa fa-arrow-circle-up fa-1x" aria-hidden="true"></i>
 		</button>
-		<div id="loader-pmd">
+		{# <div id="loader-pmd">
 			<div class="loader">
 				<img width="40%" src="{{ asset('/img/logo/pmd-developper.png') }}" class="d-block mx-auto" alt="">
 				chargement...
 			</div>
-		</div>
+		</div> #}
 
 		<header class="main-header pt-1">
 			<div class="container">
@@ -67,12 +69,14 @@
 					<div class="collapse navbar-collapse" id="mainMenu">
 						<ul class="navbar-nav ml-auto text-uppercase f1">
 							<li>
-								<a href="/">Accueil</a>
+								<a href="/" class="active">Accueil</a>
 							</li>
 							<li>
-								<a href="{{ path('main_modele_index') }}" class="active">Modele</a>
+								<a href="{{ path('modeles_index') }}">Modele</a>
 							</li>
-
+							<li>
+								<a href="{{ path('abonnement_index') }}">Abonnement</a>
+							</li>
 							<li>
 								<a href="{{ path('app_login') }}">Connexion</a>
 							</li>
@@ -193,6 +197,7 @@
 
 		<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 		<!--script src="swiper.min.js"></script-->
+		   <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
 		<script>
 

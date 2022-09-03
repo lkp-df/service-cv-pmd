@@ -25,7 +25,7 @@ class TypeAbonnement
     private $designation;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=0)
+     * @ORM\Column(type="integer")
      */
     private $montant;
 
@@ -38,6 +38,11 @@ class TypeAbonnement
      * @ORM\OneToMany(targetEntity=Abonnement::class, mappedBy="typeAbonnement")
      */
     private $abonnements;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $duree;
 
     public function __construct()
     {
@@ -61,12 +66,12 @@ class TypeAbonnement
         return $this;
     }
 
-    public function getMontant(): ?string
+    public function getMontant(): ?int
     {
         return $this->montant;
     }
 
-    public function setMontant(string $montant): self
+    public function setMontant(int $montant): self
     {
         $this->montant = $montant;
 
@@ -111,6 +116,18 @@ class TypeAbonnement
                 $abonnement->setTypeAbonnement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDuree(): ?int
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(int $duree): self
+    {
+        $this->duree = $duree;
 
         return $this;
     }

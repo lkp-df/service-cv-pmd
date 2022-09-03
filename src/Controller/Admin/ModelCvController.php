@@ -84,6 +84,7 @@ class ModelCvController extends AbstractController
      */
     public function show(ModelCv $modelCv): Response
     {
+        // dd($modelCv);
         return $this->render('admin/model_cv/show.html.twig', [
             'model_cv' => $modelCv,
         ]);
@@ -122,17 +123,18 @@ class ModelCvController extends AbstractController
 
              //on va supprimer cette ancienne image dans le dossier des images de CV
              $imagePath = $upload_dir .DIRECTORY_SEPARATOR.$avatar;
-            if(fileExists($imagePath)){
+             $r = false;
+            if(file_exists($imagePath)){
                 $r = unlink($imagePath);
             }
-
              //on verifie si la suprresion est bien effectuée, on insert la nouvelle image
              if ($r) {
                 //modifier l'ancien image par le nouveau nom
                 $modelCv->setImage($filename);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($modelCv);
+                // $em->persist($modelCv);
                 $em->flush();
+                $this->addFlash('success','Modification enregistrée');
                 return $this->redirectToRoute('model_show', ['id'=>$modelCv->getId()], Response::HTTP_SEE_OTHER);
             }
         }

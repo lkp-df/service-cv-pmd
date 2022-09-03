@@ -1,0 +1,68 @@
+{% import "macros/breadcrumb.html.twig" as breadcrumb %}
+{% import "macros/dataTable.html.twig" as dataTable %}
+{% block head %}
+	{{ dataTable.css()
+}}
+{% endblock %}
+{% block foot %}
+	{{ dataTable.js() }}
+{% endblock %}
+{% block javascripts %}
+	{{ dataTable.script('#table-1') }}
+{% endblock %}
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Listes des commandes{% endblock %}
+{% block breadcrumb %}
+    {{ breadcrumb.breadcrumb('Listes des commandes') }}
+ {% endblock %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">Listes des commandes</div>
+    </div>
+    <div class="card-body">
+        {# <a href="{{ path('admin_commande_new') }}" class="btn btn-primary mb-2">Create new</a> #}
+        <table id="table-1" class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Number</th>
+                    <th>Note</th>
+                    <th>State</th>
+                    <th>Total</th>
+                    <th>Created_at</th>
+                    <th>PaymentDue</th>
+                    <th>Items_total</th>
+                    <th>Adjustments_total</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.id }}</td>
+                    <td>{{ commande.number }}</td>
+                    <td>{{ commande.note }}</td>
+                    <td>{{ commande.state }}</td>
+                    <td>{{ commande.total }}</td>
+                    <td>{{ commande.createdAt ? commande.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ commande.paymentDue ? commande.paymentDue|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ commande.itemsTotal }}</td>
+                    <td>{{ commande.adjustmentsTotal }}</td>
+                    <td>
+                        <a href="{{ path('admin_commande_show', {'id': commande.id}) }}">{{'show'|trans}}</a>
+                        <a href="{{ path('admin_commande_edit', {'id': commande.id}) }}">{{'edit'|trans}}</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

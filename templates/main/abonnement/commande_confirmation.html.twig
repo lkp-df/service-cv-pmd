@@ -1,0 +1,136 @@
+{% extends "main/base.html.twig" %}
+{% import "macros/alertes.html.twig" as alert %}
+{% block title %}Confirmation de choix d'abonnement{% endblock %}
+
+{% block main %}
+<nav class="breadcrumb breadcrumb-1 border-none  py-1 bg-2 m-0">
+    <a class="breadcrumb-item" href="/">Accueil</a>
+    <a class="breadcrumb-item" href="/">Listes des abonnements</a>
+    <span class="breadcrumb-item text-white active">Confirmation</span>
+</nav>
+
+<section class="my-5">
+    <div class="container p-5 bg-white">
+        <p class="text-center py-3 billing-alert">{{ 'Thank you. Your order has been received.'|trans }}</p>
+        <div class="row mb-5">
+            <div class="col-12 col-md-12">
+                {% for item in app.flashes('success') %}
+                    {{ alert.alert(item,'success')}}
+                {% endfor %}
+            </div>
+            <div class="col-md-6 col-xl-6 mb-4 mb-xl-0">
+                <div class="confirmation-card">
+                    <h3 class="billing-title">{{'Order Info'|trans}}</h3>
+                    <table class="order-rable">
+                        <tbody>
+                            <tr>
+                                <td>{{'Order number'|trans}}</td>
+                                <td>:
+                                    00001</td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>:
+                                    {{ date()|date_format_fr }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>:
+                                    {{ 1000|number_format(0,'.',' ') }}
+                                    {{ site.current_name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Payment method</td>
+                                <td>:Orange Money
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-6 mb-4 mb-xl-0">
+                <div class="confirmation-card">
+                    <h3 class="billing-title">{{ 'Delivery Space'|trans }}</h3>
+                    <table class="order-rable">
+                        <tbody>
+                            <tr>
+                                <td>{{ 'City'|trans }}</td>
+                                <td>:
+                                    Dakar</td>
+                            </tr>
+                            <tr>
+                                <td>{{'Country'|trans}}</td>
+                                <td>:
+                                    Senegal</td>
+                            </tr>
+                            <tr>
+                                <td>{{'Postal code'|trans}}</td>
+                                <td>: 11000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="order_details_table">
+            <h2>{{'Order Details'|trans}}</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{'Type'|trans}}</th>
+                            <th scope="col">{{'Quantity'|trans}}</th>
+                            <th scope="col">{{'Prix'|trans}}</th>
+                            <th scope="col">{{'Total'|trans}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {# {% for item in order.orderItem %} #}
+                            <tr>
+                                <td>
+                                    <p>{{ 'Sandard' }}</p>
+                                </td>
+                                <td>
+                                    <h5>x
+                                        {{ '1' }}</h5>
+                                </td>
+                                <td>1 000 F cfa</td>
+                                <td>
+                                    <p>{{ 1000|number_format(0,'.',' ') }}
+                                        {{ site.current_name }}</p>
+                                </td>
+                            </tr>
+                        {# {% endfor %} #}
+                        <tr>
+                            <td>
+                                <h4>Subtotal</h4>
+                            </td>
+                            <td>
+                                <h5></h5>
+                            </td>
+                            <td>
+                                <p>{{ 1000|number_format(0,'',' ') }}
+                                    {{ site.current_name }}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4>Total</h4>
+                            </td>
+                            <td>
+                                <h5></h5>
+                            </td>
+                            <td>
+                                <h4>{{ 1000|number_format(0,'', ' ') }}
+                                    {{ site.current_name }}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

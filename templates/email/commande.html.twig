@@ -1,0 +1,17 @@
+{% extends "email/base.html.twig" %}
+{% block title %}Facture #{{commande.number}}{% endblock %}
+{% block body %}
+<p>Bonjour {{ commande.user.personne.fullName }}</p>
+<p>Il s'agit d'une facture générée  le {{ date()|date_format_fr }}  </p>
+{% include "email/_commande.html.twig" %}
+<p>
+    <b>Facture:</b> #{{commande.number}} <br>
+    <b>Montant:</b> <span style="color:red;font-weight:bold">{{commande.total|number_format(0,'.',' ' )}}</span>
+    {{site.current_name|upper}} <br>
+    <b>Date émission:</b> {{ commande.createdAt| date_format_fr }}<br>
+    <b>Etat de la commande:</b> {{ etat }}<br>
+    <b>{{'Payment Due'|trans}}:</b> {{ commande.paymentDue |date_format_fr }}
+</p>
+<p>- Payement Via orange money ou wave au 78 127 82 88</p>
+
+{% endblock %}

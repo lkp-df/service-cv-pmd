@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AbonnementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,13 @@ class Abonnement
      * @ORM\JoinColumn(nullable=false)
      */
     private $typeAbonnement;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="abonnements")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
 
     public function getId(): ?int
     {
@@ -91,6 +100,18 @@ class Abonnement
     public function setTypeAbonnement(?TypeAbonnement $typeAbonnement): self
     {
         $this->typeAbonnement = $typeAbonnement;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

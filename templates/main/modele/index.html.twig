@@ -1,39 +1,41 @@
 {% extends "main/base.html.twig" %}
 
 {% block head %}
-		<link rel="stylesheet" href="{{ asset('css/service-cv.css') }}">
+<link rel="stylesheet" href="{{ asset('css/service-cv.css') }}">
 {% endblock %}
 {% block main %}
-	<!-- modele -->
-	<section data-aos="fade-up" id="modele" class="bg-white text-center">
-		<p class="text-white font-weight-bold home-title">Creer et concerver vos cv en ligne</p>
-	</section>
-	<nav class="breadcrumb breadcrumb-1 border-none  py-1 bg-2 m-0">
-		<a class="breadcrumb-item" href="index.html">Accueil</a>
-		<span class="breadcrumb-item text-white active">Tous nos model</span>
-	</nav>
-	<section>
-		<div class="container pt-5 bg-white">
-			<p class="text-center">Choississez puis concerver vos cv en ligne à partir de 1 000 Fcfa pour une durré de 1 an</p>
-			<p class="text-center">Vous obtiendrez le lien de votre modele de cv pour une large visibilité</p>
+<!-- modele -->
+<section data-aos="fade-up" id="modele" class="bg-white text-center">
+	<p class="text-white font-weight-bold home-title">Creer et concerver vos cv en ligne</p>
+</section>
+<nav class="breadcrumb breadcrumb-1 border-none  py-1 bg-2 m-0">
+	<a class="breadcrumb-item" href="index.html">Accueil</a>
+	<span class="breadcrumb-item text-white active">Tous nos model</span>
+</nav>
+<section>
+	<div class="container pt-5 bg-white">
+		<p class="text-center">Choississez puis concerver vos cv en ligne à partir de 1 000 Fcfa pour une durré de 1 an
+		</p>
+		<p class="text-center">Vous obtiendrez le lien de votre modele de cv pour une large visibilité</p>
 
-			<div class="row">
-				<div class="col-md-12 col-12">
-					<div class="row">
+		<div class="row">
+			<div class="col-md-12 col-12">
+				<div class="row">
 					{% for item in modeles %}
-						<div class="col-md-4 col-6 my-5">
-							<a href="#">
-								<div class="card modele">
-									<img src="{{ asset('img/modeles/modele-0001.png') }}" class="card-img-top" alt="">
-									<div class="model-button">
-										<a href="#" class="btn-3">Utiliser ce modele</a>
-									</div>
+					<div class="col-md-4 col-6 my-5">
+						<a href="#">
+							<div class="card modele">
+								<img src="{{ asset('img/modeles/' ~ item.image) }}" class="card-img-top" alt="">
+								<div class="model-button">
+									<a href="{{ path('modeles_choice',{id:item.id}) }}" class="btn-3">Utiliser ce
+										modele</a>
 								</div>
-							</a>
-						</div>
-					{% endfor %}						
+							</div>
+						</a>
 					</div>
+					{% endfor %}
 				</div>
 			</div>
-		</section>
-	{% endblock %}
+		</div>
+</section>
+{% endblock %}

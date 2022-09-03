@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220713142015 extends AbstractMigration
+final class Version20220901010934 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,10 @@ final class Version20220713142015 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE abonnement (id INT AUTO_INCREMENT NOT NULL, type_abonnement_id INT NOT NULL, debut DATETIME NOT NULL, fin DATETIME NOT NULL, statut VARCHAR(15) NOT NULL, INDEX IDX_351268BB813AF326 (type_abonnement_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE abonnement (id INT AUTO_INCREMENT NOT NULL, type_abonnement_id INT NOT NULL, user_id INT NOT NULL, debut DATETIME NOT NULL, fin DATETIME NOT NULL, statut VARCHAR(15) NOT NULL, INDEX IDX_351268BB813AF326 (type_abonnement_id), INDEX IDX_351268BBA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE centre_interet (id INT AUTO_INCREMENT NOT NULL, user_for_cv_id INT DEFAULT NULL, designation VARCHAR(255) NOT NULL, INDEX IDX_E1E0E4E04FB246AC (user_for_cv_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE commande (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, number VARCHAR(255) NOT NULL, note VARCHAR(255) DEFAULT NULL, state VARCHAR(255) NOT NULL, total INT NOT NULL, created_at DATETIME NOT NULL, payment_due DATETIME NOT NULL, items_total INT NOT NULL, adjustments_total INT NOT NULL, INDEX IDX_6EEAA67DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE commande_item (id INT AUTO_INCREMENT NOT NULL, commande_id INT DEFAULT NULL, debut DATETIME NOT NULL, fin DATETIME NOT NULL, status VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, prix INT NOT NULL, INDEX IDX_747724FD82EA2E54 (commande_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE competence (id INT AUTO_INCREMENT NOT NULL, user_for_cv_id INT NOT NULL, designation VARCHAR(255) NOT NULL, niveau_pourcent INT DEFAULT NULL, INDEX IDX_94D4687F4FB246AC (user_for_cv_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE contact (id INT AUTO_INCREMENT NOT NULL, user_for_cv_id INT NOT NULL, tel VARCHAR(255) DEFAULT NULL, adresse VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, INDEX IDX_4C62E6384FB246AC (user_for_cv_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE cv (id INT AUTO_INCREMENT NOT NULL, user_for_cv_id INT NOT NULL, user_id INT NOT NULL, num_cv INT NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_B66FFE924FB246AC (user_for_cv_id), INDEX IDX_B66FFE92A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -38,7 +40,10 @@ final class Version20220713142015 extends AbstractMigration
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, personne_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_verified TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D649A21BD112 (personne_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE user_for_cv (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, avatar VARCHAR(255) DEFAULT NULL, poste_recherche_occupe VARCHAR(255) DEFAULT NULL, sexe VARCHAR(5) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE abonnement ADD CONSTRAINT FK_351268BB813AF326 FOREIGN KEY (type_abonnement_id) REFERENCES type_abonnement (id)');
+        $this->addSql('ALTER TABLE abonnement ADD CONSTRAINT FK_351268BBA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE centre_interet ADD CONSTRAINT FK_E1E0E4E04FB246AC FOREIGN KEY (user_for_cv_id) REFERENCES user_for_cv (id)');
+        $this->addSql('ALTER TABLE commande ADD CONSTRAINT FK_6EEAA67DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE commande_item ADD CONSTRAINT FK_747724FD82EA2E54 FOREIGN KEY (commande_id) REFERENCES commande (id)');
         $this->addSql('ALTER TABLE competence ADD CONSTRAINT FK_94D4687F4FB246AC FOREIGN KEY (user_for_cv_id) REFERENCES user_for_cv (id)');
         $this->addSql('ALTER TABLE contact ADD CONSTRAINT FK_4C62E6384FB246AC FOREIGN KEY (user_for_cv_id) REFERENCES user_for_cv (id)');
         $this->addSql('ALTER TABLE cv ADD CONSTRAINT FK_B66FFE924FB246AC FOREIGN KEY (user_for_cv_id) REFERENCES user_for_cv (id)');
@@ -57,10 +62,13 @@ final class Version20220713142015 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE commande_item DROP FOREIGN KEY FK_747724FD82EA2E54');
         $this->addSql('ALTER TABLE model_cv DROP FOREIGN KEY FK_70232E25CFE419E2');
         $this->addSql('ALTER TABLE tache_effectuer DROP FOREIGN KEY FK_C0810C508F978030');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D649A21BD112');
         $this->addSql('ALTER TABLE abonnement DROP FOREIGN KEY FK_351268BB813AF326');
+        $this->addSql('ALTER TABLE abonnement DROP FOREIGN KEY FK_351268BBA76ED395');
+        $this->addSql('ALTER TABLE commande DROP FOREIGN KEY FK_6EEAA67DA76ED395');
         $this->addSql('ALTER TABLE cv DROP FOREIGN KEY FK_B66FFE92A76ED395');
         $this->addSql('ALTER TABLE model_cv DROP FOREIGN KEY FK_70232E2573A201E5');
         $this->addSql('ALTER TABLE centre_interet DROP FOREIGN KEY FK_E1E0E4E04FB246AC');
@@ -74,6 +82,8 @@ final class Version20220713142015 extends AbstractMigration
         $this->addSql('ALTER TABLE profil DROP FOREIGN KEY FK_E6D6B2974FB246AC');
         $this->addSql('DROP TABLE abonnement');
         $this->addSql('DROP TABLE centre_interet');
+        $this->addSql('DROP TABLE commande');
+        $this->addSql('DROP TABLE commande_item');
         $this->addSql('DROP TABLE competence');
         $this->addSql('DROP TABLE contact');
         $this->addSql('DROP TABLE cv');

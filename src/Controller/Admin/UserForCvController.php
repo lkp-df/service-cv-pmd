@@ -57,7 +57,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserForCvController extends AbstractController
 {
-    private $parent_name = 'Curicilium Vitae';
+    private $parent_page = 'Curicilium Vitae';
 
     /**
      * @Route("/my-account/cv/", name="cv_index", methods={"GET"})
@@ -71,6 +71,7 @@ class UserForCvController extends AbstractController
     }
 
     /**
+     * @Route("/my-account/my-curicilium-vitae/new", name="my_cv_new", methods={"GET","POST"})
      * @Route("/my-account/curicilium-vitae/new", name="cv_new", methods={"GET","POST"})
      */
     public function new(Request $request, UserForCvRepository $repo, ExperienceProfessionnelleRepository $ex): Response
@@ -423,12 +424,14 @@ class UserForCvController extends AbstractController
     }
 
     /**
+     * @Route("/my-account/my-curicilium-vitae/{id}", name="my_cv_show", methods={"GET"})
      * @Route("/my-account/curicilium-vitae/{id}", name="cv_show", methods={"GET"})
      */
     public function show(UserForCv $userForCv): Response
     {
         return $this->render('admin/user_for_cv/show.html.twig', [
             'user' => $userForCv,
+            'parent_page'=>$this->parent_page
         ]);
     }
 

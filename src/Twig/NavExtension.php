@@ -42,11 +42,11 @@ class NavExtension extends AbstractExtension
                         [
                             [
                                 'name' => 'Mes cvs',
-                                'path' => 'client_cv_index'
+                                'path' => 'my_cv_index'
                             ],
                             [
                                 'name' => 'Nouveau Cv',
-                                'path' => 'cv_new'
+                                'path' => 'my_cv_new'
                             ]
                         ]
 
@@ -93,6 +93,16 @@ class NavExtension extends AbstractExtension
                             ]
                         ]
 
+                    ],
+                    [
+                        'name' => 'Commande',
+                        'icon' => 'fas fa-users',
+                        'links'=>[
+                            [
+                                'name'=>'Liste des commandes',
+                                'path'=>'admin_commande_index'
+                            ]
+                        ]
                     ],
                     [
                         'name' => 'user',

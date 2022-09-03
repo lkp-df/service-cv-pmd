@@ -23,7 +23,7 @@ class TypeAbonnementFixtures extends Fixture
             ],
             [
                 'name'=>'Prémium',
-                'montant'=>'2000',
+                'montant'=>'3000',
                 'qty'=>9
             ],
         ];
